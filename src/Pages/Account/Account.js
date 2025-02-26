@@ -322,7 +322,7 @@ const Account = () => {
                 label="Vai trò"
                 fullWidth
                 margin="normal"
-                value={selectedAccount.vaitro} // Giá trị hiện tại của vai trò
+                value={selectedAccount.vaitro}
                 onChange={(e) =>
                   setSelectedAccount({
                     ...selectedAccount,

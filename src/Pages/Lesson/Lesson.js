@@ -17,6 +17,8 @@ import {
   Tabs,
   Tab,
   Box,
+  Select,
+  Fab,
   Typography,
 } from "@mui/material";
 import {
@@ -38,31 +40,17 @@ const Lesson = () => {
   const [value, setValue] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
+  const [topics, setTopic] = useState([]);
+  const [openAdd, setOpenAdd] = useState(false);
   // Lọc bài học theo tab
-  const filteredSkills = lessons((lesson) => {
+  const filteredSkills = lessons.filter((lesson) => {
     if (value === 0 && lesson.skill === 0) return true; // Listening
     if (value === 1 && lesson.skill === 1) return true; // Speaking
     if (value === 2 && lesson.skill === 2) return true; // Reading
     if (value === 3 && lesson.skill === 3) return true; // Writing
     return false;
   });
-  const btnStatus = (skill) => {
-    switch (skill) {
-      case 0:
-        return { confirm: true, cancel: true, action: "confirm" }; // Action cho từng trạng thái
-      case 1:
-        return { confirm: true, cancel: false, action: "complete" };
-      case 2:
-        return { confirm: true, cancel: false, action: "payment" };
-      case 3:
-        return { confirm: false, cancel: false, action: null };
-      default:
-        return { confirm: false, cancel: false, action: null };
-    }
-  };
 
-  const { confirm, cancel } = btnStatus(value);
   const convertTrangThai = (skill) => {
     const trangThaiMap = {
       0: "Listening",
@@ -72,17 +60,67 @@ const Lesson = () => {
     };
     return trangThaiMap[skill] || "Không xác định";
   };
+
+  const fetchTopics = async () => {
+    try {
+      const response = await axios.get(`${url}myapi/Topics/getTT.php`);
+      setTopic(response.data);
+    } catch (error) {
+      console.error("Error fetching topic", error);
+    }
+  };
+
   const fetchLessons = async () => {
     try {
-      const response = await axios.get(`${url}myapi/Lichhen/getallLh.php`);
-      setLesson(response.data.lichhen);
+      const response = await axios.get(`${url}myapi/baihoc/getallLh.php`);
+      setLesson(response.data.baihoc);
       console.log(response);
     } catch (error) {
       console.error("Error fetching lessons:", error);
     }
   };
 
-  // TÌM KIẾM bài học
+  // thêm bài học
+  const handleAddSubmit = async (newLesson) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", newLesson.title);
+      formData.append("content", newLesson.content);
+      formData.append("skill", newLesson.skill);
+      formData.append("topic_id", newLesson.topic_id);
+      formData.append("difficulty_level", newLesson.difficulty_level);
+      formData.append("created_at ", parseFloat(newLesson.created_at));
+      // Gửi yêu cầu thêm dịch vụ mới
+      const response = await axios.post(
+        `${url}/myapi/Baihoc/themBaihoc.php`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.success) {
+        console.log("Thêm bài học thành công");
+      } else {
+        console.error("Lỗi:", response.data.message);
+      }
+      // Sau khi thêm thành công, đóng form và tải lại danh sách
+      setOpenAdd(false);
+      fetchLessons();
+    } catch (error) {
+      console.error("Error adding center:", error);
+    }
+  };
+
+  const handleAddClick = () => {
+    setOpenAdd(true);
+  };
+  const handleAddClose = () => {
+    setOpenAdd(false);
+  };
+
+  // tìm kiếm bài học
   const searchLessons = async (startDate, endDate) => {
     try {
       if (!startDate || !endDate) {
@@ -90,7 +128,7 @@ const Lesson = () => {
         return;
       }
       const response = await axios.get(
-        `${url}myapi/Lichhen/tkLichhen.php?start_date=${startDate}&end_date=${endDate}`
+        `${url}myapi/baihoc/tkbaihoc.php?start_date=${startDate}&end_date=${endDate}`
       );
       console.log(response.data);
 
@@ -105,6 +143,7 @@ const Lesson = () => {
   };
 
   useEffect(() => {
+    fetchTopics();
     if (startDate && endDate) {
       searchLessons(startDate, endDate);
     } else {
@@ -115,12 +154,12 @@ const Lesson = () => {
   // Sửa bài học
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`${url}myapi/Trungtam/suatrungtam.php`, selectedLesson);
+      await axios.put(`${url}myapi/Baihoc/suaBaihoc.php`, selectedLesson);
 
       setOpenEdit(false);
-      fetchCenters();
+      fetchLessons();
     } catch (error) {
-      console.error("Error updating center:", error);
+      console.error("Error updating lesson:", error);
     }
   };
   const handleEdit = (center) => {
@@ -132,29 +171,17 @@ const Lesson = () => {
     setSelectedLesson(null);
   };
 
-  //HỦY bài học
-  const Huylich = async (lesson_id, lyDo) => {
+  //Xóa bài học
+  const handleDelete = async (lesson_id) => {
     try {
-      const response = await axios.post(`${url}myapi/Lichhen/huylichhen.php`, {
-        lesson_id,
-        lydohuy: lyDo,
+      const response = await axios.post(`${url}myapi/baihoc/huybaihoc.php`, {
+        data: { lesson_id: id },
       });
-
-      if (response.data.success) {
-        console.log("Thành công", "bài học đã được hủy thành công.");
-        fetchLessons();
-      } else {
-        console.log(
-          "Lỗi",
-          response.data.message || "Hủy lịch không thành công."
-        );
-      }
     } catch (error) {
       console.error(error);
       console.log("Lỗi", "Không thể kết nối với máy chủ.");
     }
   };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -166,7 +193,7 @@ const Lesson = () => {
         className="tabstatus"
         value={value}
         onChange={handleChange}
-        aria-label="Appointment Status Tabs"
+        aria-label="Lesson Status Tabs"
       >
         <Tab className="tabitem" label="Listening" />
         <Tab className="tabitem" label="Speaking" />
@@ -176,9 +203,9 @@ const Lesson = () => {
 
       {/* Tìm kiếm theo ngày */}
 
-      <Box className="book-search-bar">
+      <Box className="lesson-search-bar">
         <TextField
-          className="book-search-start"
+          className="lesson-search-start"
           label="Ngày bắt đầu"
           variant="outlined"
           type="date"
@@ -189,7 +216,7 @@ const Lesson = () => {
           onChange={(e) => setStartDate(e.target.value)}
         />
         <TextField
-          className="book-search-end"
+          className="lesson-search-end"
           label="Ngày kết thúc"
           variant="outlined"
           type="date"
@@ -202,9 +229,9 @@ const Lesson = () => {
       </Box>
 
       {/* Bảng bài học */}
-      <TableContainer component={Paper} className="book-table-container">
-        <Table aria-label="appointment table" className="book-table">
-          <TableHead className="head-book">
+      <TableContainer component={Paper} className="lesson-table-container">
+        <Table aria-label="lesson table" className="lesson-table">
+          <TableHead className="head-lesson">
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Tiêu đề</TableCell>
@@ -219,8 +246,8 @@ const Lesson = () => {
           </TableHead>
 
           <TableBody>
-            {filteredLessons.length > 0 ? (
-              filteredLessons.map((lesson) => (
+            {filteredSkills.length > 0 ? (
+              filteredSkills.map((lesson) => (
                 <TableRow key={lesson.lesson_id}>
                   <TableCell>{lesson.lesson_id}</TableCell>
                   <TableCell>{lesson.title}</TableCell>
@@ -231,29 +258,19 @@ const Lesson = () => {
 
                   <TableCell>{lesson.created_at}</TableCell>
 
-                  <TableCell className="book-table-actions">
-                    {confirm && (
-                      <IconButton
-                        color="success"
-                        onClick={() =>
-                          handleConfirm(
-                            btnStatus(lesson.trangthai).action,
-                            lesson.lesson_id
-                          )
-                        }
-                        disabled={!btnStatus(value).confirm}
-                      >
-                        <CheckIcon />
-                      </IconButton>
-                    )}
-                    {cancel && (
-                      <IconButton
-                        color="warning"
-                        onClick={() => openCancelModal(lesson.lesson_id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    )}
+                  <TableCell className="lesson-table-actions">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(center)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(center.idBaihoc)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -267,6 +284,7 @@ const Lesson = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
       {/* Dialog sửa*/}
       <Dialog open={openEdit} onClose={handleEditClose}>
         <DialogTitle>Sửa bài học</DialogTitle>
@@ -277,11 +295,11 @@ const Lesson = () => {
                 label="Tiêu đề"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.tentrungtam}
+                value={selectedLesson.title}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
-                    tentrungtam: e.target.value,
+                    title: e.target.value,
                   })
                 }
               />
@@ -289,11 +307,11 @@ const Lesson = () => {
                 label="Nội dung"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.diachi}
+                value={selectedLesson.content}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
-                    diachi: e.target.value,
+                    content: e.target.value,
                   })
                 }
               />
@@ -301,61 +319,62 @@ const Lesson = () => {
                 label="Kỹ năng"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.sodienthoai}
+                value={selectedLesson.skill}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
-                    sodienthoai: e.target.value,
+                    skill: e.target.value,
                   })
                 }
               />
-              <TextField
-                label="Chủ đề"
+              <Select
                 fullWidth
                 margin="normal"
-                value={selectedLesson.email}
+                value={selectedLesson.topic_id}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
-                    email: e.target.value,
+                    topic_id: e.target.value,
                   })
                 }
-              />
+              >
+                {/* Hiển thị chủ đề hiện tại */}
+                {selectedLesson.topic_id && (
+                  <MenuItem value={selectedLesson.topic_id}>
+                    {topics.find((t) => t.id === selectedLesson.topic_id)
+                      ?.name || "Chủ đề hiện tại"}
+                  </MenuItem>
+                )}
+
+                {topics.map((topic) => (
+                  <MenuItem key={topic.id} value={topic.id}>
+                    {topic.name}
+                  </MenuItem>
+                ))}
+              </Select>
+
               <TextField
                 label="Độ khó"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.hinhanh}
+                value={selectedLesson.difficulty_level}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
-                    hinhanh: e.target.value,
+                    difficulty_level: e.target.value,
                   })
                 }
               />
-
-              {/* <TextField
-                label="Thời gian tạo"
-                fullWidth
-                margin="normal"
-                value={selectedLesson.toadoy}
-                onChange={(e) =>
-                  setSelectedLesson({
-                    ...selectedLesson,
-                    toadoy: e.target.value,
-                  })
-                }
-              /> */}
             </>
           )}
         </DialogContent>
 
         <DialogActions>
           <Button onClick={handleEditClose} color="secondary">
-            Cancel
+            Trở lại
           </Button>
           <Button onClick={handleEditSubmit} color="primary">
-            Save
+            Lưu lại
           </Button>
         </DialogActions>
       </Dialog>
@@ -370,7 +389,7 @@ const Lesson = () => {
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
-                tentrungtam: e.target.value,
+                title: e.target.value,
               })
             }
           />
@@ -381,7 +400,7 @@ const Lesson = () => {
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
-                diachi: e.target.value,
+                content: e.target.value,
               })
             }
           />
@@ -392,21 +411,30 @@ const Lesson = () => {
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
-                sodienthoai: e.target.value,
+                skill: e.target.value,
               })
             }
           />
-          <TextField
+          <Select
+            labelId="select-center-label"
             label="Chủ đề"
             fullWidth
             margin="normal"
-            onChange={(e) =>
+            value={selectedLesson?.topic_id || ""}
+            onChange={(e) => {
+              const newTopic_id = e.target.value;
               setSelectedLesson({
                 ...selectedLesson,
-                email: e.target.value,
-              })
-            }
-          />
+                topic_id: newTopic_id,
+              });
+            }}
+          >
+            {topics.map((topic) => (
+              <MenuItem key={topic.topic_id} value={topic.topic_id}>
+                {topic.name}
+              </MenuItem>
+            ))}
+          </Select>
 
           <TextField
             label="Độ khó"
@@ -415,37 +443,25 @@ const Lesson = () => {
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
-                hinhanh: e.target.value, // Nhập URL hình ảnh
-              })
-            }
-          />
-
-          <TextField
-            label="Thời gian tạo"
-            fullWidth
-            margin="normal"
-            onChange={(e) =>
-              setSelectedLesson({
-                ...selectedLesson,
-                toadoy: e.target.value,
+                difficulty_level: e.target.value,
               })
             }
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleAddClose} color="secondary">
-            Cancel
+            Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedLesson)}
             color="primary"
           >
-            Add
+            Thêm
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Nút thêm dịch vụ */}
+      {/* Nút thêm bài học */}
       <Box sx={{ position: "fixed", bottom: 30, right: 50 }}>
         <Fab color="primary" aria-label="add" onClick={handleAddClick}>
           <AddIcon />

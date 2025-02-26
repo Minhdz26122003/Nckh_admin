@@ -63,8 +63,42 @@
 
 .date-picker-container .MuiFormControl-root {
   min-width: 150px;
+  color: white;
 }
 
+/* Đổi màu chữ */
+.date-picker-container .MuiInputBase-input {
+  color: white !important;
+}
+
+/* Đổi màu viền */
+.date-picker-container .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+/* Khi hover */
+.date-picker-container
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+/* Khi focus */
+.date-picker-container
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+/* Đổi màu cho label */
+.date-picker-container .MuiInputLabel-root {
+  color: white !important;
+}
+
+/* Khi label focus */
+.date-picker-container .MuiInputLabel-root.Mui-focused {
+  color: white !important;
+}
 .chart-title {
   font-size: 1.5rem;
   font-weight: bold;

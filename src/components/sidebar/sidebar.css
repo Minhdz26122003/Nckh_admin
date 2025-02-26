@@ -14,9 +14,9 @@
 
   background: linear-gradient(
     106.37deg,
-    #fdf4ef 29.63%,
-    #faeded 51.55%,
-    #f1ffee 90.85%
+    #f3f3f3 29.63%,
+    #ffffff 51.55%,
+    #fddfdf 90.85%
   );
 }
 
@@ -34,14 +34,14 @@
 }
 
 .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(211, 210, 210, 0.6);
   transform: translateX(10px);
-  color: #f00000;
+  color: #1976d2;
 }
 
 /* Mục Sidebar active */
 .sidebar-item.active {
-  background-color: #ffffff;
+  background-color: #d8d8d8;
   color: #1976d2;
   font-weight: bold;
   transform: translateX(10px);

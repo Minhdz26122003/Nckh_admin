@@ -2,7 +2,7 @@
 .account-table-container {
   position: relative;
   left: 170px;
-  max-width: 88%;
+  max-width: calc(100% - 170px);
   margin-top: -30px;
 }
 .head-account th {
@@ -14,7 +14,7 @@
   background-color: aliceblue;
 }
 .account-search-container {
-  max-width: 88%;
+  max-width: calc(100% - 170px);
   margin-bottom: 10px;
   left: 170px;
   position: relative;

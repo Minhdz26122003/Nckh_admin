@@ -198,19 +198,10 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="card blue">
-          <CardContent>
-            <Typography variant="h6" component="div">
-              Doanh thu
-            </Typography>
-            <Typography variant="h5">{formatCurrency(price)}</Typography>
-          </CardContent>
-        </Card>
-
         <Card className="card yellow">
           <CardContent>
             <Typography variant="h6" component="div">
-              Tổng dịch vụ
+              Số câu hỏi
             </Typography>
             <Typography variant="h5">{service}</Typography>
           </CardContent>
@@ -219,22 +210,23 @@ const Dashboard = () => {
         <Card className="card red">
           <CardContent>
             <Typography variant="h6" component="div">
-              Số trung tâm
+              Số chủ đề
             </Typography>
             <Typography variant="h5">{center}</Typography>
           </CardContent>
         </Card>
+
         <Card className="card purple ">
           <CardContent>
             <Typography variant="h6" component="div">
-              Tổng lượt đặt
+              Số bài kiểm tra
             </Typography>
             <Typography variant="h5">{appointments}</Typography>
           </CardContent>
         </Card>
       </div>
       <div className="date-picker-container">
-        <FormControl sx={{ minWidth: 120, margin: "0 10px" }}>
+        <FormControl>
           <InputLabel>Tháng</InputLabel>
           <Select
             value={month}
@@ -249,7 +241,7 @@ const Dashboard = () => {
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 120, margin: "0 10px" }}>
+        <FormControl>
           <InputLabel>Năm</InputLabel>
           <Select
             value={year}
@@ -309,7 +301,7 @@ const Dashboard = () => {
         {/* Biểu đồ thanh (BarChart) */}
         <div className="bar-chart-container">
           <Typography variant="h6" component="div" className="chart-title">
-            Biểu đồ tổng lịch hẹn theo tháng
+            Biểu đồ tổng bài kiểm tra theo tháng
           </Typography>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={datayear}>
@@ -331,7 +323,7 @@ const Dashboard = () => {
       </div>
 
       {/* Biểu đồ kết hợp (ComposedChart) */}
-      <div className="composed-chart-container">
+      {/* <div className="composed-chart-container">
         <Typography variant="h6" component="div" className="chart-title">
           Biểu đồ tổng hợp lịch hẹn và người dùng trong tháng
         </Typography>
@@ -366,7 +358,7 @@ const Dashboard = () => {
             </Line>
           </ComposedChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
     </div>
   );
 };

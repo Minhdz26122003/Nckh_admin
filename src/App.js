@@ -11,14 +11,10 @@ import TopBar from "../src/components/topbar/topbar";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Account from "./Pages/Account/Account";
 import Topic from "./Pages/Topic/topic";
-import Center from "./Pages/Centers/centers";
-import Sale from "./Pages/Sales/Sales";
 import Lesson from "./Pages/Lesson/Lesson";
 import Profile from "./Pages/Profile/profile";
 import Login from "./Pages/Login/Login";
-import Sercen from "./Pages/Ser-Cen/ServiceCen";
-import Payment from "./Pages/Payment/Payment";
-import Review from "./Pages/Review/Review";
+
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -109,6 +105,10 @@ function App() {
                 path="/topic"
                 element={<PrivateRoute element={<Topic />} />}
               />
+              <Route
+                path="/lesson"
+                element={<PrivateRoute element={<Lesson />} />}
+              />
               {/* <Route
                 path="/center"
                 element={<PrivateRoute element={<Center />} />}
@@ -121,10 +121,7 @@ function App() {
                 path="/sale"
                 element={<PrivateRoute element={<Sale />} />}
               /> */}
-              {/* <Route
-                path="/lesson"
-                element={<PrivateRoute element={<Lesson />} />}
-              />
+              {/* 
               <Route
                 path="/payment"
                 element={<PrivateRoute element={<Payment />} />}

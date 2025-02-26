@@ -2,7 +2,7 @@
 .topic-table-container {
   position: static;
   margin-left: 170px;
-  max-width: 88%;
+  max-width: calc(100% - 170px);
   margin-top: 10px;
 }
 .head-topic th {
@@ -19,7 +19,7 @@
   align-items: center;
   margin-left: 170px;
   background-color: aliceblue;
-  max-width: 100%;
+  max-width: calc(100% - 170px);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -320,10 +320,10 @@ const Topic = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose} color="secondary">
-            Cancel
+            Trở lại
           </Button>
           <Button onClick={handleEditSubmit} color="primary">
-            Save
+            Lưu
           </Button>
         </DialogActions>
       </Dialog>
@@ -368,13 +368,13 @@ const Topic = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleAddClose} color="secondary">
-            Cancel
+            Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedTopic)}
             color="primary"
           >
-            Add
+            Thêm
           </Button>
         </DialogActions>
       </Dialog>
