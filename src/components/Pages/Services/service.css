@@ -1,0 +1,63 @@
+/* Định dạng bảng */
+.service-table-container {
+  position: static;
+  margin-left: 170px;
+  max-width: 88%;
+  margin-top: 10px;
+}
+.head-service th {
+  background-color: rgb(236, 209, 210);
+  font-weight: bold;
+  font-size: 16px;
+}
+.service-table {
+  border-collapse: collapse;
+}
+.service-search-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: 170px;
+  max-width: 100%;
+  background-color: aliceblue;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.search-text {
+  padding-left: 20px;
+}
+.service-search-text {
+  padding-left: 100px;
+  margin-left: 40px;
+  flex: 1;
+}
+
+.service-search-price {
+  margin: 20px;
+  max-width: 300px;
+}
+
+.service-table th,
+.service-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.service-table-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dialog-content {
+  margin-top: 10px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

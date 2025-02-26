@@ -1,0 +1,46 @@
+/* Định dạng bảng */
+.sale-table-container {
+  position: static;
+  margin-left: 170px;
+  max-width: 88%;
+  margin-top: -30px;
+}
+.head-sale th {
+  background-color: rgb(236, 209, 210);
+  font-weight: bold;
+  font-size: 16px;
+}
+.sale-table {
+  border-collapse: collapse;
+}
+.sale-search-bar {
+  position: static;
+  max-width: 88%;
+  background-color: aliceblue;
+  left: 170px;
+  top: -20px;
+}
+.sale-table th,
+.sale-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.sale-table-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dialog-content {
+  margin-top: 10px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
