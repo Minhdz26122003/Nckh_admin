@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 import "./Accounts.css"; // Import style riêng
-import url from "../../../ipconfixad.js";
+import url from "../../ipconfixad.js";
 const Account = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState({

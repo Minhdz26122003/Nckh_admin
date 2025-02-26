@@ -6,19 +6,19 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
-import Sidebar from "./components/sidebar/sidebar";
-import TopBar from "./components/topbar/topbar";
-import Dashboard from "./components/Pages/Dashboard/Dashboard";
-import Account from "./components/Pages/Account/Account";
-import Service from "./components/Pages/Services/service";
-import Center from "./components/Pages/Centers/centers";
-import Sale from "./components/Pages/Sales/Sales";
-import Booking from "./components/Pages/Booking/Booking";
-import Profile from "./components/Pages/Profile/profile";
-import Login from "./components/Pages/Login/Login";
-import Sercen from "./components/Pages/Ser-Cen/ServiceCen";
-import Payment from "./components/Pages/Payment/Payment";
-import Review from "./components/Pages/Review/Review";
+import Sidebar from "../src/components/sidebar/sidebar";
+import TopBar from "../src/components/topbar/topbar";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import Account from "./Pages/Account/Account";
+import Topic from "./Pages/Topic/topic";
+import Center from "./Pages/Centers/centers";
+import Sale from "./Pages/Sales/Sales";
+import Lesson from "./Pages/Lesson/Lesson";
+import Profile from "./Pages/Profile/profile";
+import Login from "./Pages/Login/Login";
+import Sercen from "./Pages/Ser-Cen/ServiceCen";
+import Payment from "./Pages/Payment/Payment";
+import Review from "./Pages/Review/Review";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -106,10 +106,10 @@ function App() {
                 element={<PrivateRoute element={<Account />} />}
               />
               <Route
-                path="/service"
-                element={<PrivateRoute element={<Service />} />}
+                path="/topic"
+                element={<PrivateRoute element={<Topic />} />}
               />
-              <Route
+              {/* <Route
                 path="/center"
                 element={<PrivateRoute element={<Center />} />}
               />
@@ -120,10 +120,10 @@ function App() {
               <Route
                 path="/sale"
                 element={<PrivateRoute element={<Sale />} />}
-              />
-              <Route
-                path="/booking"
-                element={<PrivateRoute element={<Booking />} />}
+              /> */}
+              {/* <Route
+                path="/lesson"
+                element={<PrivateRoute element={<Lesson />} />}
               />
               <Route
                 path="/payment"
@@ -132,7 +132,7 @@ function App() {
               <Route
                 path="/review"
                 element={<PrivateRoute element={<Review />} />}
-              />
+              /> */}
               <Route
                 path="/profile"
                 element={<PrivateRoute element={<Profile user={user} />} />}

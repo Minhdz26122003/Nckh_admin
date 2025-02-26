@@ -1,32 +1,36 @@
 /* Định dạng bảng */
-.sale-table-container {
-  position: static;
-  margin-left: 170px;
+.account-table-container {
+  position: relative;
+  left: 170px;
   max-width: 88%;
   margin-top: -30px;
 }
-.head-sale th {
-  background-color: rgb(236, 209, 210);
+.head-account th {
+  background-color: rgb(161, 162, 162);
   font-weight: bold;
   font-size: 16px;
 }
-.sale-table {
-  border-collapse: collapse;
-}
-.sale-search-bar {
-  position: static;
-  max-width: 88%;
+.account-search-bar {
   background-color: aliceblue;
+}
+.account-search-container {
+  max-width: 88%;
+  margin-bottom: 10px;
   left: 170px;
+  position: relative;
   top: -20px;
 }
-.sale-table th,
-.sale-table td {
+.account-table {
+  border-collapse: collapse;
+}
+
+.account-table th,
+.account-table td {
   padding: 12px;
   text-align: left;
 }
 
-.sale-table-actions {
+.account-table-actions {
   display: flex;
   justify-content: space-around;
 }

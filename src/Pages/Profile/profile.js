@@ -17,7 +17,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import axios from "axios";
-import url from "../../../ipconfixad.js";
+import url from "../../ipconfixad";
 const Profile = ({ user }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

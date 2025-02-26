@@ -8,7 +8,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import url from "../../../ipconfixad.js";
+import url from "../../ipconfixad";
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");

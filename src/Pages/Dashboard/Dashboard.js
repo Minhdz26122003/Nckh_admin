@@ -28,7 +28,7 @@ import {
 
 import axios from "axios";
 import "./dashboard.css"; // Import style riêng
-import url from "../../../ipconfixad.js";
+import url from "../../ipconfixad";
 
 const Dashboard = () => {
   const [month, setMonth] = useState(12);

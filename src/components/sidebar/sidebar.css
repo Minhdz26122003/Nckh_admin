@@ -58,12 +58,12 @@
 /* Icon active */
 .sidebar-icon.active {
   color: #1976d2;
-
   transform: scale(1.2);
 }
 
 .sidebar-icon:hover {
-  transform: rotate(360deg);
+  /* transform: rotate(360deg); */
+  transform: scale(1.2);
 }
 
 /* Text */

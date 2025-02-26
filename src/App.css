@@ -15,12 +15,13 @@
 .App {
   /* padding: 0.5rem 3.5rem; */
   color: var(--black);
-  background: linear-gradient(
+  background-color: #c4e0f7;
+  /* background: linear-gradient(
     106.37deg,
-    #e2efee 29.63%,
+    #404a49 29.63%,
     #f4e9ee 51.55%,
-    #e4ebf1 90.85%
-  );
+    #c4e0f7 90.85%
+  ); */
   height: 100vh;
   display: flex;
   align-items: center;
