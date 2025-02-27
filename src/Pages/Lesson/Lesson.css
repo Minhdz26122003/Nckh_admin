@@ -22,8 +22,12 @@
   font-weight: bold;
   margin: 0 4px;
   border-radius: 4px;
+  color: #333 !important; /* Màu chữ đậm hơn */
+  font-weight: bold; /* Làm chữ đậm để dễ nhìn hơn */
 }
-
+.MuiTabs-indicator {
+  background-color: #0044cc !important; /* Màu gạch chân của tab đang chọn */
+}
 .head-lesson th {
   background-color: rgb(195, 196, 196);
   font-weight: bold;
@@ -36,7 +40,7 @@
   margin-left: 170px;
   background-color: rgb(245, 253, 255);
   padding: 10px;
-  max-width: 50%;
+  max-width: 40%;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;

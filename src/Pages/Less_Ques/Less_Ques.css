@@ -1,0 +1,49 @@
+/* Định dạng bảng */
+.lessques-table-container {
+  position: static;
+  margin-left: 170px;
+  max-width: calc(100% - 170px);
+  margin-top: -10px;
+}
+.head-lessques th {
+  background-color: rgb(236, 209, 210);
+  font-weight: bold;
+  font-size: 16px;
+}
+.lessques-table {
+  border-collapse: collapse;
+}
+.lessques-search-bar {
+  position: static;
+  max-width: calc(100% - 170px);
+  background-color: aliceblue;
+  left: 170px;
+  top: -20px;
+}
+.lessques-table th,
+.lessques-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.lessques-table-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dialog-content {
+  margin-top: 10px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.select-center-label {
+  width: 100%;
+}

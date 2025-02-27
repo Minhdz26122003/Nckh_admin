@@ -89,7 +89,7 @@ const Lesson = () => {
       formData.append("skill", newLesson.skill);
       formData.append("topic_id", newLesson.topic_id);
       formData.append("difficulty_level", newLesson.difficulty_level);
-      formData.append("created_at ", parseFloat(newLesson.created_at));
+
       // Gửi yêu cầu thêm dịch vụ mới
       const response = await axios.post(
         `${url}/myapi/Baihoc/themBaihoc.php`,
@@ -328,6 +328,7 @@ const Lesson = () => {
                 }
               />
               <Select
+                label="Chủ đề"
                 fullWidth
                 margin="normal"
                 value={selectedLesson.topic_id}

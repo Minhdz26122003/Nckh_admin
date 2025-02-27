@@ -14,7 +14,7 @@ import Topic from "./Pages/Topic/topic";
 import Lesson from "./Pages/Lesson/Lesson";
 import Profile from "./Pages/Profile/profile";
 import Login from "./Pages/Login/Login";
-
+import Lessques from "./Pages/Less_Ques/Less_Ques";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -109,11 +109,11 @@ function App() {
                 path="/lesson"
                 element={<PrivateRoute element={<Lesson />} />}
               />
-              {/* <Route
-                path="/center"
-                element={<PrivateRoute element={<Center />} />}
-              />
               <Route
+                path="/lessques"
+                element={<PrivateRoute element={<Lessques />} />}
+              />
+              {/* <Route
                 path="/sercen"
                 element={<PrivateRoute element={<Sercen />} />}
               />

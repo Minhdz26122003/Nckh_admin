@@ -33,7 +33,7 @@ const Topic = () => {
   const [selectedTopic, setSelectedTopic] = useState({
     tenchude: "",
     description: "",
-    created_at: "",
+    // created_at: "",
   });
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
@@ -55,7 +55,7 @@ const Topic = () => {
   };
 
   const checkData = async (newTopic) => {
-    if (!newTopic.name || !newTopic.description || !newTopic.created_at) {
+    if (!newTopic.name || !newTopic.description) {
       alert("Vui lòng điền đầy đủ thông tin!");
       return;
     }
@@ -99,7 +99,6 @@ const Topic = () => {
       const formData = new FormData();
       formData.append("name", newTopic.name);
       formData.append("description", newTopic.description);
-      formData.append("created_at ", parseFloat(newTopic.created_at));
 
       const response = await axios.post(
         `${url}myapi/Chude/themChude`,
@@ -112,7 +111,7 @@ const Topic = () => {
       );
 
       if (response.data.success) {
-        console.log("Thêm chủ đềthành công");
+        console.log("Thêm chủ đề thành công");
       } else {
         console.error("Lỗi:", response.data.message);
       }
@@ -303,18 +302,6 @@ const Topic = () => {
                   })
                 }
               />
-              <TextField
-                label="Thời gian tạo"
-                fullWidth
-                margin="normal"
-                value={selectedTopic.created_at}
-                onChange={(e) =>
-                  setSelectedTopic({
-                    ...selectedTopic,
-                    created_at: e.target.value,
-                  })
-                }
-              />
             </>
           )}
         </DialogContent>
@@ -351,17 +338,6 @@ const Topic = () => {
               setSelectedTopic({
                 ...selectedTopic,
                 description: e.target.value,
-              })
-            }
-          />
-          <TextField
-            label="Thời gian tạo"
-            fullWidth
-            margin="normal"
-            onChange={(e) =>
-              setSelectedTopic({
-                ...selectedTopic,
-                created_at: e.target.value,
               })
             }
           />

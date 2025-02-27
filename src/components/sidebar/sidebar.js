@@ -28,11 +28,11 @@ const Sidebar = ({ onMenuClick }) => {
     { text: "Tài khoản", icon: <PersonIcon />, link: "/account" },
     { text: "Chủ đề bài học", icon: <RoomServiceIcon />, link: "/topic" },
     { text: "Bài học", icon: <MapsHomeWorkIcon />, link: "/lesson" },
-    // {
-    //   text: "Bài học & câu hỏi",
-    //   icon: <FormatAlignCenterIcon />,
-    //   link: "/sercen",
-    // },
+    {
+      text: "Bài học & câu hỏi",
+      icon: <FormatAlignCenterIcon />,
+      link: "/lessques",
+    },
     // { text: "Bài kiểm tra", icon: <LoyaltyIcon />, link: "/sale" },
 
     // { text: "Câu hỏi của bài kiểm tra", icon: <PaidIcon />, link: "/payment" },

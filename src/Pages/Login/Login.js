@@ -83,6 +83,7 @@ const LoginPage = ({ onLogin }) => {
         margin: "auto",
         marginTop: "100px",
         padding: 3,
+        color: "#333",
         boxShadow: 3,
         borderRadius: 2,
         textAlign: "center",
