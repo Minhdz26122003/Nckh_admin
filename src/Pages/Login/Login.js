@@ -9,6 +9,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import url from "../../ipconfixad";
+import "../Login/Login.css"; // Import CSS riêng
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -19,29 +20,10 @@ const LoginPage = ({ onLogin }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Hàm quản lý localStorage
-  const handleLocalStorage = (remember, user = "", pass = "") => {
-    if (remember) {
-      localStorage.setItem("username", user);
-      localStorage.setItem("password", pass);
-      localStorage.setItem("rememberMe", true);
-      sessionStorage.setItem("username", user);
-    } else {
-      localStorage.removeItem("username");
-      localStorage.removeItem("password");
-      localStorage.removeItem("rememberMe");
-      sessionStorage.setItem("username", user);
-    }
-  };
-
   useEffect(() => {
     if (rememberMe) {
-      const savedUsername = localStorage.getItem("username");
-      const savedPassword = localStorage.getItem("password");
-      if (savedUsername && savedPassword) {
-        setUsername(savedUsername);
-        setPassword(savedPassword);
-      }
+      setUsername(localStorage.getItem("username") || "");
+      setPassword(localStorage.getItem("password") || "");
     }
   }, []);
 
@@ -51,21 +33,20 @@ const LoginPage = ({ onLogin }) => {
     try {
       const response = await fetch(`${url}myapi/dangnhapad.php`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      if (!response.ok) {
-        throw new Error("Không thể kết nối đến server.");
-      }
-
+      if (!response.ok) throw new Error("Không thể kết nối đến server.");
       const data = await response.json();
 
       if (data.success) {
         onLogin(data.user, rememberMe);
-        handleLocalStorage(rememberMe, username, password);
+        localStorage.setItem("rememberMe", rememberMe);
+        if (rememberMe) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+        }
         navigate("/");
       } else {
         setError(data.message || "Đăng nhập thất bại.");
@@ -74,55 +55,56 @@ const LoginPage = ({ onLogin }) => {
       setError(err.message || "Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
+
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        width: 300,
-        margin: "auto",
-        marginTop: "100px",
-        padding: 3,
-        color: "#333",
-        boxShadow: 3,
-        borderRadius: 2,
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h5" gutterBottom>
-        Đăng Nhập
-      </Typography>
-      <TextField
-        label="Tên đăng nhập"
-        variant="outlined"
-        fullWidth
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Mật khẩu"
-        variant="outlined"
-        type="password"
-        fullWidth
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        margin="normal"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-        }
-        label="Ghi nhớ đăng nhập"
-      />
-      {error && <Typography color="error">{error}</Typography>}
-      <Button type="submit" variant="contained" color="primary" fullWidth>
-        Đăng Nhập
-      </Button>
-    </Box>
+    <div className="signin">
+      {/* Hiệu ứng nền */}
+      <section>
+        {Array.from({ length: 300 }).map((_, index) => (
+          <span key={index}></span>
+        ))}
+      </section>
+
+      {/* Box đăng nhập */}
+      <Box component="form" onSubmit={handleSubmit} className="login-box">
+        <Typography variant="h5" className="login-title">
+          Đăng Nhập
+        </Typography>
+        <TextField
+          label="Tên đăng nhập"
+          variant="outlined"
+          fullWidth
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          margin="normal"
+          className="login-input"
+        />
+        <TextField
+          label="Mật khẩu"
+          variant="outlined"
+          type="password"
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          margin="normal"
+          className="login-input"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+          }
+          label="Ghi nhớ đăng nhập"
+          className="login-remember"
+        />
+        {error && <Typography className="login-error">{error}</Typography>}
+        <Button type="submit" variant="contained" className="login-button">
+          Đăng Nhập
+        </Button>
+      </Box>
+    </div>
   );
 };
 

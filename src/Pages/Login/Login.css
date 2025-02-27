@@ -1,0 +1,94 @@
+/* Định dạng toàn bộ trang */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  background: #181818;
+  overflow: hidden;
+}
+
+section span {
+  position: relative;
+  display: block;
+  width: calc(4vw - 2px);
+  height: calc(4vw - 2px);
+  background: #181818;
+  z-index: 2;
+  transition: 1.5s;
+}
+
+section span:hover {
+  background: #ff0000;
+  transition: 0s;
+}
+
+/* Định dạng box đăng nhập */
+.signin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  z-index: 10;
+}
+
+.login-box {
+  width: 300px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 15px 35px rgba(122, 122, 122, 0.9);
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #85d7f2, #66a8ff);
+}
+
+/* Tiêu đề */
+.login-title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+/* Ô nhập */
+.login-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Nút đăng nhập */
+.login-button {
+  width: 100%;
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+/* Ghi nhớ đăng nhập */
+.login-remember {
+  display: flex;
+  justify-content: start;
+}
+
+/* Lỗi */
+.login-error {
+  color: red;
+  font-size: 14px;
+}
