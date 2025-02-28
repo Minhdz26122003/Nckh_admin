@@ -16,10 +16,12 @@ import {
   Button,
   Tabs,
   Tab,
-  Box,
   Select,
   Fab,
-  Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Box,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -63,7 +65,7 @@ const Lesson = () => {
 
   const fetchTopics = async () => {
     try {
-      const response = await axios.get(`${url}myapi/Topics/getTT.php`);
+      const response = await axios.get(`${url}myapi/Topics/getTp`);
       setTopic(response.data);
     } catch (error) {
       console.error("Error fetching topic", error);
@@ -72,7 +74,7 @@ const Lesson = () => {
 
   const fetchLessons = async () => {
     try {
-      const response = await axios.get(`${url}myapi/baihoc/getallLh.php`);
+      const response = await axios.get(`${url}myapi/baihoc/getall`);
       setLesson(response.data.baihoc);
       console.log(response);
     } catch (error) {
@@ -92,7 +94,7 @@ const Lesson = () => {
 
       // Gửi yêu cầu thêm dịch vụ mới
       const response = await axios.post(
-        `${url}/myapi/Baihoc/themBaihoc.php`,
+        `${url}/myapi/Baihoc/themBaihoc`,
         formData,
         {
           headers: {
@@ -128,7 +130,7 @@ const Lesson = () => {
         return;
       }
       const response = await axios.get(
-        `${url}myapi/baihoc/tkbaihoc.php?start_date=${startDate}&end_date=${endDate}`
+        `${url}myapi/baihoc/tkbaihoc?start_date=${startDate}&end_date=${endDate}`
       );
       console.log(response.data);
 
@@ -154,7 +156,7 @@ const Lesson = () => {
   // Sửa bài học
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`${url}myapi/Baihoc/suaBaihoc.php`, selectedLesson);
+      await axios.put(`${url}myapi/Baihoc/suaBaihoc`, selectedLesson);
 
       setOpenEdit(false);
       fetchLessons();
@@ -174,12 +176,18 @@ const Lesson = () => {
   //Xóa bài học
   const handleDelete = async (lesson_id) => {
     try {
-      const response = await axios.post(`${url}myapi/baihoc/huybaihoc.php`, {
+      const response = await axios.post(`${url}myapi/baihoc/huybaihoc`, {
         data: { lesson_id: id },
       });
+      if (response.data.success) {
+        window.alert("Xóa bài học thành công");
+      } else {
+        console.error("Lỗi:", response.data.message);
+      }
+      fetchLessons();
+      fetchLessons(lessons.filter((less) => less.lesson_id !== id));
     } catch (error) {
-      console.error(error);
-      console.log("Lỗi", "Không thể kết nối với máy chủ.");
+      console.error("Error deleting lesson:", error);
     }
   };
   const handleChange = (event, newValue) => {
@@ -315,18 +323,31 @@ const Lesson = () => {
                   })
                 }
               />
-              <TextField
+
+              {/* Danh sách các kỹ năng*/}
+              <InputLabel>Kỹ năng</InputLabel>
+              <Select
+                className="select-skill"
                 label="Kỹ năng"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.skill}
+                value={selectedLesson?.skill || ""}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
                     skill: e.target.value,
                   })
                 }
-              />
+              >
+                {["Listening", "Speaking", "Reading", "Writing"].map(
+                  (qskill) => (
+                    <MenuItem key={qskill} value={qskill}>
+                      {qskill}
+                    </MenuItem>
+                  )
+                )}
+              </Select>
+
               <Select
                 label="Chủ đề"
                 fullWidth
@@ -340,32 +361,41 @@ const Lesson = () => {
                 }
               >
                 {/* Hiển thị chủ đề hiện tại */}
-                {selectedLesson.topic_id && (
+                {/* {selectedLesson.topic_id && (
                   <MenuItem value={selectedLesson.topic_id}>
                     {topics.find((t) => t.id === selectedLesson.topic_id)
                       ?.name || "Chủ đề hiện tại"}
                   </MenuItem>
-                )}
+                )} */}
 
                 {topics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
+                  <MenuItem key={topic.topic_id} value={topic.topic_id}>
                     {topic.name}
                   </MenuItem>
                 ))}
               </Select>
 
-              <TextField
+              {/* Danh sách độ khó*/}
+              <InputLabel>Độ khó</InputLabel>
+              <Select
+                className="select-difficult"
                 label="Độ khó"
                 fullWidth
                 margin="normal"
-                value={selectedLesson.difficulty_level}
+                value={selectedLesson?.difficulty_level || ""}
                 onChange={(e) =>
                   setSelectedLesson({
                     ...selectedLesson,
                     difficulty_level: e.target.value,
                   })
                 }
-              />
+              >
+                {["Easy", "Medium", "Hard"].map((qdiff) => (
+                  <MenuItem key={qdiff} value={qdiff}>
+                    {qdiff}
+                  </MenuItem>
+                ))}
+              </Select>
             </>
           )}
         </DialogContent>
@@ -379,6 +409,7 @@ const Lesson = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       {/* Dialog thêm */}
       <Dialog open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Thêm bài học</DialogTitle>
@@ -405,19 +436,28 @@ const Lesson = () => {
               })
             }
           />
-          <TextField
+
+          <InputLabel className="label">Kỹ năng</InputLabel>
+          <Select
             label="Kỹ năng"
             fullWidth
             margin="normal"
+            value={selectedLesson?.skill || ""}
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
                 skill: e.target.value,
               })
             }
-          />
+          >
+            <MenuItem value="Listening">Listening</MenuItem>
+            <MenuItem value="Speaking">Speaking</MenuItem>
+            <MenuItem value="Reading">Reading</MenuItem>
+            <MenuItem value="Writing">Writing</MenuItem>
+          </Select>
+
+          <InputLabel className="label">Chủ đề</InputLabel>
           <Select
-            labelId="select-center-label"
             label="Chủ đề"
             fullWidth
             margin="normal"
@@ -437,17 +477,23 @@ const Lesson = () => {
             ))}
           </Select>
 
-          <TextField
+          <InputLabel className="label">Độ khó</InputLabel>
+          <Select
             label="Độ khó"
             fullWidth
             margin="normal"
+            value={selectedLesson?.difficulty_level || ""}
             onChange={(e) =>
               setSelectedLesson({
                 ...selectedLesson,
                 difficulty_level: e.target.value,
               })
             }
-          />
+          >
+            <MenuItem value="Easy">Easy</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="Hard">Hard</MenuItem>
+          </Select>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleAddClose} color="secondary">

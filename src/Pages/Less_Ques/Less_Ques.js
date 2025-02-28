@@ -44,15 +44,13 @@ const Less_Ques = () => {
     fetchLessons();
     fetchQuestions();
     if (selectedLesson?.question_id) {
-      fetl(selectedLesson.question_id); // Lấy danh sách câu hỏi chưa có
+      fetchQuestions(selectedLesson.question_id); // Lấy danh sách câu hỏi chưa có
     }
   }, [selectedLesson?.question_id]);
 
   const fetchLessonQuestion = async () => {
     try {
-      const response = await axios.get(
-        `${url}myapi/Lesson_Question/getall.php`
-      );
+      const response = await axios.get(`${url}myapi/Lesson_Question/getall`);
       setLessonQuestion(response.data);
     } catch (error) {
       console.error("Error fetching lesson-question:", error);
@@ -61,16 +59,22 @@ const Less_Ques = () => {
 
   const fetchLessons = async () => {
     try {
-      const response = await axios.get(`${url}myapi/Lesson/getall.php`);
+      const response = await axios.get(`${url}myapi/Lesson/getall`);
       setLessons(response.data);
     } catch (error) {
       console.error("Error fetching lessons:", error);
     }
   };
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (lessId) => {
+    if (!lessId) return;
     try {
-      const response = await axios.get(`${url}myapi/Question/getall.php`);
+      const response = await axios.get(
+        `${url}myapi/Lesson_Question/getquestinless`,
+        {
+          params: { question_id: lessId },
+        }
+      );
       setQuestions(response.data);
     } catch (error) {
       console.error("Error fetching questions:", error);
@@ -184,43 +188,43 @@ const Less_Ques = () => {
         <DialogContent>
           <InputLabel>Bài học</InputLabel>
           <Select
-            labelId="select-center-label"
+            labelId="select-less-label"
             label="Bài học"
             fullWidth
             margin="normal"
-            value={selectedLesson?.question_id || ""}
+            value={selectedLesson?.lesson_id || ""}
             onChange={(e) => {
-              const newCenterId = e.target.value;
+              const newlessid = e.target.value;
               setselectedLesson({
                 ...selectedLesson,
-                question_id: newCenterId,
+                lesson_id: newlessid,
               });
             }}
-          >
-            {questions.map((question) => (
-              <MenuItem key={question.question_id} value={question.question_id}>
-                {question.content}
-              </MenuItem>
-            ))}
-          </Select>
-
-          <InputLabel id="select-service-label">Câu hỏi</InputLabel>
-          <Select
-            labelId="select-service-label"
-            label="Dịch vụ"
-            fullWidth
-            margin="normal"
-            value={selectedLesson?.lesson_id || ""}
-            onChange={(e) =>
-              setselectedLesson({
-                ...selectedLesson,
-                lesson_id: e.target.value,
-              })
-            }
           >
             {lessons.map((lesson) => (
               <MenuItem key={lesson.lesson_id} value={lesson.lesson_id}>
                 {lesson.title}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <InputLabel>Câu hỏi</InputLabel>
+          <Select
+            labelId="select-quest-label"
+            label="Câu hỏi"
+            fullWidth
+            margin="normal"
+            value={selectedLesson?.question_id || ""}
+            onChange={(e) =>
+              setselectedLesson({
+                ...selectedLesson,
+                question_id: e.target.value,
+              })
+            }
+          >
+            {questions.map((question) => (
+              <MenuItem key={question.question_id} value={question.question_id}>
+                {question.content}
               </MenuItem>
             ))}
           </Select>

@@ -1,5 +1,5 @@
 /* Định dạng bảng */
-.lesson-table-container {
+.quest-table-container {
   position: relative;
   left: 170px;
   max-width: calc(100% - 170px);
@@ -19,6 +19,14 @@
 .label {
   margin-top: 10px;
 }
+.quest-filter {
+  position: relative;
+  left: 170px;
+  font-weight: bold;
+
+  max-width: 88%;
+  margin-bottom: 10px;
+}
 .tabitem {
   border: 0.5px solid black;
   font-weight: bold;
@@ -30,12 +38,12 @@
 .MuiTabs-indicator {
   background-color: #0044cc !important; /* Màu gạch chân của tab đang chọn */
 }
-.head-lesson th {
+.head-quest th {
   background-color: rgb(195, 196, 196);
   font-weight: bold;
   font-size: 16px;
 }
-.lesson-search-bar {
+.quest-search-bar {
   display: flex;
   justify-content: left;
   align-items: center;
@@ -47,23 +55,23 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
 }
-.lesson-search-start {
+.quest-search-start {
   width: 400px;
 }
-.lesson-search-end {
+.quest-search-end {
   width: 400px;
 }
-.lesson-table {
+.quest-table {
   border-collapse: collapse;
 }
 
-.lesson-table th,
-.lesson-table td {
+.quest-table th,
+.quest-table td {
   padding: 12px;
   text-align: left;
 }
 
-.lesson-table-actions {
+.quest-table-actions {
   display: flex;
   justify-content: space-around;
 }

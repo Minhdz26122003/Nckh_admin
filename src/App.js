@@ -15,6 +15,7 @@ import Lesson from "./Pages/Lesson/Lesson";
 import Profile from "./Pages/Profile/profile";
 import Login from "./Pages/Login/Login";
 import Lessques from "./Pages/Less_Ques/Less_Ques";
+import Question from "./Pages/Questtion/Question";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -113,11 +114,11 @@ function App() {
                 path="/lessques"
                 element={<PrivateRoute element={<Lessques />} />}
               />
-              {/* <Route
-                path="/sercen"
-                element={<PrivateRoute element={<Sercen />} />}
-              />
               <Route
+                path="/question"
+                element={<PrivateRoute element={<Question />} />}
+              />
+              {/*<Route
                 path="/sale"
                 element={<PrivateRoute element={<Sale />} />}
               /> */}
