@@ -1,94 +1,88 @@
-/* Định dạng toàn bộ trang */
-body,
-html {
+/* Reset margin/padding */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* Toàn màn hình */
+html,
+body {
+  width: 100%;
   height: 100%;
-  overflow: hidden;
-}
-section {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-wrap: wrap;
-  background: #181818;
-  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
 }
 
-section span {
-  position: relative;
-  display: block;
-  width: calc(4vw - 2px);
-  height: calc(4vw - 2px);
-  background: #181818;
-  z-index: 2;
-  transition: 1.5s;
-}
-
-section span:hover {
-  background: #ff0000;
-  transition: 0s;
-}
-
-/* Định dạng box đăng nhập */
-.signin {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  z-index: 10;
-}
-
-.login-box {
-  width: 300px;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 15px 35px rgba(122, 122, 122, 0.9);
-  border-radius: 10px;
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
-
+/* Container chính: Ảnh nền hoặc gradient */
 .login-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  /* Ảnh nền toàn màn hình */
+  background: url("../../assets/image/bg-sign-in-basic.jpeg") no-repeat center
+    center / cover;
+  /* hoặc dùng gradient
+  background: linear-gradient(135deg, #85d7f2, #66a8ff);
+  */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #85d7f2, #66a8ff);
+}
+
+/* Box đăng nhập ở giữa */
+.login-box {
+  width: 350px;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 /* Tiêu đề */
 .login-title {
-  color: #333;
   font-size: 24px;
-  margin-bottom: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 /* Ô nhập */
 .login-input {
-  width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 /* Nút đăng nhập */
 .login-button {
   width: 100%;
-  background-color: #007bff !important;
-  color: white !important;
+  background-color: #1976d2 !important;
+  color: #fff !important;
+  margin-top: 10px;
+  text-transform: none;
 }
 
-/* Ghi nhớ đăng nhập */
+/* Checkbox "Ghi nhớ" */
 .login-remember {
-  display: flex;
-  justify-content: start;
+  justify-content: flex-start;
+  margin: 10px 0;
 }
 
 /* Lỗi */
 .login-error {
   color: red;
   font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Footer */
+.login-footer {
+  position: absolute;
+  bottom: 20px;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
 }

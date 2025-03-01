@@ -25,6 +25,8 @@ function App() {
   const [loggedInUser, setLoggedInUser] = useState(
     sessionStorage.getItem("username") || null
   );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   useEffect(() => {
     const storedUser =
@@ -49,7 +51,6 @@ function App() {
     } else {
       // Nếu không, lưu vào sessionStorage
       sessionStorage.setItem("user", JSON.stringify(userData));
-
       localStorage.setItem("rememberMe", rememberMe);
     }
   };
@@ -63,10 +64,12 @@ function App() {
       localStorage.removeItem("user");
       localStorage.removeItem("username");
       localStorage.removeItem("rememberMe");
+      localStorage.removeItem("password");
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("username");
     } else {
       sessionStorage.removeItem("user");
+
       sessionStorage.removeItem("username");
     }
   };
@@ -77,52 +80,63 @@ function App() {
 
   return (
     <div className="App">
-      <div className="AppGlass">
-        <Router>
-          {loggedInUser && (
+      <Router>
+        {loggedInUser ? (
+          /* ĐÃ đăng nhập => render layout chính */
+          <div className="AppGlass">
             <Sidebar
-              onMenuClick={handleMenuClick} // Truyền hàm vào Sidebar
+              onMenuClick={handleMenuClick}
+              isSidebarOpen={isSidebarOpen}
             />
-          )}
-          <Box sx={{ flexGrow: 1, padding: "20px" }}>
-            {loggedInUser && (
-              <TopBar
-                username={loggedInUser}
-                onLogout={handleLogout}
-                title={title}
-              />
-            )}
-            <Routes>
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route
-                path="/"
-                element={<PrivateRoute element={<Dashboard />} />}
-              />
-              <Route
-                path="/account"
-                element={<PrivateRoute element={<Account />} />}
-              />
-              <Route
-                path="/topic"
-                element={<PrivateRoute element={<Topic />} />}
-              />
-              <Route
-                path="/lesson"
-                element={<PrivateRoute element={<Lesson />} />}
-              />
-              <Route
-                path="/lessques"
-                element={<PrivateRoute element={<Lessques />} />}
-              />
-              <Route
-                path="/question"
-                element={<PrivateRoute element={<Question />} />}
-              />
-              {/*<Route
+            <TopBar
+              username={loggedInUser}
+              onLogout={handleLogout}
+              title={title}
+              isSidebarOpen={isSidebarOpen}
+              onToggleSidebar={toggleSidebar}
+            />
+            <Box
+              component="main"
+              sx={{
+                marginLeft: isSidebarOpen ? "120px" : "0px",
+                transition: "margin-left 0.5s",
+                p: 2,
+              }}
+            >
+              <Routes>
+                <Route
+                  path="/login"
+                  element={<Login onLogin={handleLogin} />}
+                />
+                <Route
+                  path="/"
+                  element={<PrivateRoute element={<Dashboard />} />}
+                />
+                <Route
+                  path="/account"
+                  element={<PrivateRoute element={<Account />} />}
+                />
+                <Route
+                  path="/topic"
+                  element={<PrivateRoute element={<Topic />} />}
+                />
+                <Route
+                  path="/lesson"
+                  element={<PrivateRoute element={<Lesson />} />}
+                />
+                <Route
+                  path="/lessques"
+                  element={<PrivateRoute element={<Lessques />} />}
+                />
+                <Route
+                  path="/question"
+                  element={<PrivateRoute element={<Question />} />}
+                />
+                {/*<Route
                 path="/sale"
                 element={<PrivateRoute element={<Sale />} />}
               /> */}
-              {/* 
+                {/* 
               <Route
                 path="/payment"
                 element={<PrivateRoute element={<Payment />} />}
@@ -131,14 +145,22 @@ function App() {
                 path="/review"
                 element={<PrivateRoute element={<Review />} />}
               /> */}
-              <Route
-                path="/profile"
-                element={<PrivateRoute element={<Profile user={user} />} />}
-              />{" "}
-            </Routes>
-          </Box>
-        </Router>
-      </div>
+                <Route
+                  path="/profile"
+                  element={<PrivateRoute element={<Profile user={user} />} />}
+                />{" "}
+              </Routes>
+            </Box>
+          </div>
+        ) : (
+          /* CHƯA đăng nhập => chỉ render trang Login */
+          <Routes>
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            {/* Nếu cố gắng truy cập bất kỳ URL khác => chuyển về /login */}
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        )}
+      </Router>
     </div>
   );
 }

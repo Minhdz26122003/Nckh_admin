@@ -186,7 +186,7 @@ const Less_Ques = () => {
       <Dialog fullWidth maxWidth="xs" open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Thêm câu hỏi</DialogTitle>
         <DialogContent>
-          <InputLabel>Bài học</InputLabel>
+          <InputLabel className="label">Bài học</InputLabel>
           <Select
             labelId="select-less-label"
             label="Bài học"
@@ -208,7 +208,7 @@ const Less_Ques = () => {
             ))}
           </Select>
 
-          <InputLabel>Câu hỏi</InputLabel>
+          <InputLabel className="label">Câu hỏi</InputLabel>
           <Select
             labelId="select-quest-label"
             label="Câu hỏi"

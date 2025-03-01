@@ -1,24 +1,19 @@
 /* Định dạng bảng */
 .account-table-container {
-  position: relative;
-  left: 170px;
-  max-width: calc(100% - 170px);
-  margin-top: -30px;
+  max-width: 100%;
+  margin-bottom: 10px;
 }
 .head-account th {
-  background-color: rgb(161, 162, 162);
+  background-color: #c4c4c4;
+  color: #000000;
   font-weight: bold;
   font-size: 16px;
 }
 .account-search-bar {
-  background-color: aliceblue;
+  background-color: rgb(255, 255, 255);
 }
 .account-search-container {
-  max-width: calc(100% - 170px);
   margin-bottom: 10px;
-  left: 170px;
-  position: relative;
-  top: -20px;
 }
 .account-table {
   border-collapse: collapse;
@@ -26,7 +21,7 @@
 
 .account-table th,
 .account-table td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
 }
 

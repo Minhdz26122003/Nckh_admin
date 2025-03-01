@@ -1,73 +1,97 @@
-/* Định dạng bảng */
-.lesson-table-container {
-  position: relative;
-  left: 170px;
-  max-width: calc(100% - 170px);
+/* Container cho Tab và thanh tìm kiếm */
+.lesson-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
 }
-.tabstatus {
-  position: relative;
-  left: 170px;
-  font-weight: bold;
-  background-color: rgb(255, 255, 255);
-  max-width: calc(100% - 170px);
-  margin-bottom: 10px;
-}
-/* CSS */
+
+/* Tab khi được chọn */
 .MuiTabs-root .MuiTab-root.Mui-selected {
-  background-color: #9fbef7; /* Màu nền khi active */
+  background-color: #9fbef7;
 }
-.label {
-  margin-top: 10px;
+
+.tabstatus {
+  margin-left: -170px;
 }
+/* Tab item */
 .tabitem {
-  border: 0.5px solid black;
+  border: 0.5px solid #444;
   font-weight: bold;
   margin: 0 4px;
   border-radius: 4px;
-  color: #333 !important; /* Màu chữ đậm hơn */
-  font-weight: bold; /* Làm chữ đậm để dễ nhìn hơn */
+  color: #333 !important;
 }
+
+/* Thanh gạch dưới của tab */
 .MuiTabs-indicator {
-  background-color: #0044cc !important; /* Màu gạch chân của tab đang chọn */
+  background-color: #0044cc !important;
 }
-.head-lesson th {
-  background-color: rgb(195, 196, 196);
-  font-weight: bold;
-  font-size: 16px;
+
+/* Thanh tìm kiếm */
+.lesson-dropdown {
+  background-color: rgb(245, 253, 255);
 }
 .lesson-search-bar {
   display: flex;
-  justify-content: left;
   align-items: center;
-  margin-left: 170px;
+  gap: 20px;
   background-color: rgb(245, 253, 255);
   padding: 10px;
-  max-width: 40%;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: auto;
+}
+
+/* Các ô nhập date */
+.lesson-search-start,
+.lesson-search-end {
+  width: 180px;
+}
+
+/* Container bảng */
+.lesson-table-container {
+  width: 100%;
   margin-bottom: 10px;
 }
-.lesson-search-start {
-  width: 400px;
-}
-.lesson-search-end {
-  width: 400px;
-}
+
+/* Bảng */
 .lesson-table {
+  width: 100%;
   border-collapse: collapse;
 }
 
+/* Header bảng */
+.head-lesson th {
+  background-color: #c4c4c4;
+  color: #000000;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Các cell */
 .lesson-table th,
 .lesson-table td {
   padding: 12px;
   text-align: left;
 }
 
+/* Zebra striping cho các hàng */
+.lesson-table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+.lesson-table tbody tr:nth-of-type(even) {
+  background-color: #fff;
+}
+
+/* Cột hành động */
 .lesson-table-actions {
   display: flex;
   justify-content: space-around;
 }
 
+/* Hộp thoại (nếu có) */
 .dialog-title {
   font-size: 20px;
   font-weight: bold;

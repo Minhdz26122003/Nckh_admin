@@ -1,5 +1,5 @@
 // Sidebar.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   List,
   ListItem,
@@ -10,28 +10,27 @@ import {
 import "./sidebar.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 
-import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
-import RoomServiceIcon from "@mui/icons-material/RoomService";
 import PersonIcon from "@mui/icons-material/Person";
-import LoyaltyIcon from "@mui/icons-material/Loyalty";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import PaidIcon from "@mui/icons-material/Paid";
-import CommentIcon from "@mui/icons-material/Comment";
+import TopicIcon from "@mui/icons-material/Topic";
+import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
+import HelpCenterRoundedIcon from "@mui/icons-material/HelpCenterRounded";
+import DynamicFeedRoundedIcon from "@mui/icons-material/DynamicFeedRounded";
 import { Link, useLocation } from "react-router-dom";
+import img from "../../assets/image/logo-ct.png";
 
-const Sidebar = ({ onMenuClick }) => {
+const Sidebar = ({ onMenuClick, isSidebarOpen }) => {
   const location = useLocation();
 
   const items = [
     { text: "Tổng quan", icon: <DashboardIcon />, link: "/" },
     { text: "Tài khoản", icon: <PersonIcon />, link: "/account" },
-    { text: "Chủ đề bài học", icon: <RoomServiceIcon />, link: "/topic" },
-    { text: "Bài học", icon: <MapsHomeWorkIcon />, link: "/lesson" },
-    { text: "Câu hỏi", icon: <LoyaltyIcon />, link: "/question" },
+    { text: "Chủ đề bài học", icon: <TopicIcon />, link: "/topic" },
+    { text: "Bài học", icon: <LibraryBooksRoundedIcon />, link: "/lesson" },
+    { text: "Câu hỏi", icon: <HelpCenterRoundedIcon />, link: "/question" },
     {
       text: "Bài học & câu hỏi",
-      icon: <FormatAlignCenterIcon />,
+      icon: <DynamicFeedRoundedIcon />,
       link: "/lessques",
     },
 
@@ -39,7 +38,42 @@ const Sidebar = ({ onMenuClick }) => {
     // { text: "Option", icon: <CommentIcon />, link: "/review" },
   ];
   return (
-    <Drawer classes={{ paper: "sidebar-container" }} variant="permanent">
+    <Drawer
+      classes={{ paper: "sidebar-container" }}
+      variant="permanent"
+      sx={{
+        width: isSidebarOpen ? 220 : 70, // Chiều rộng thay đổi
+        flexShrink: 0,
+        whiteSpace: "nowrap",
+        transition: "width 0.3s",
+        "& .MuiDrawer-paper": {
+          width: isSidebarOpen ? 220 : 70,
+          overflowX: "hidden",
+          transition: "width 0.3s",
+          backgroundColor: "#1e2023",
+          color: "#fff",
+        },
+      }}
+    >
+      {/* logo */}
+      <div className="sidebar-logo">
+        <span
+          style={{ display: isSidebarOpen ? "block" : "none" }}
+          className="dashboard-text"
+        >
+          Dashboard
+        </span>
+        <img
+          src={img}
+          alt="Logo"
+          className="logo-image"
+          style={{
+            width: isSidebarOpen ? "53px" : "25px",
+            transition: "width 0.3s",
+          }}
+        />
+      </div>
+
       <List className="siderbar">
         {items.map((item, index) => (
           <ListItem
@@ -51,15 +85,24 @@ const Sidebar = ({ onMenuClick }) => {
               location.pathname === item.link ? "active" : ""
             }`}
             onClick={() => onMenuClick(item.text)}
+            sx={{
+              display: "flex",
+              justifyContent: isSidebarOpen ? "flex-start" : "center",
+              px: 2,
+            }}
           >
             <ListItemIcon
-              className={`sidebar-icon ${
-                location.pathname === item.link ? "active" : ""
-              }`}
+              sx={{
+                minWidth: 0,
+                mr: isSidebarOpen ? 2 : "auto",
+                color: "inherit",
+                justifyContent: "center",
+              }}
             >
               {item.icon}
             </ListItemIcon>
-            <ListItemText primary={item.text} />
+            {/* Ẩn/Hiện text theo trạng thái sidebar */}
+            {isSidebarOpen && <ListItemText primary={item.text} />}
           </ListItem>
         ))}
       </List>

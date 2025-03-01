@@ -32,36 +32,33 @@ import {
 } from "@mui/icons-material";
 
 import axios from "axios";
-import ".././Lesson/Lesson.css"; // Import style riêng
+import ".././Lesson/Lesson.css";
 import url from "../../ipconfixad";
 
 const Lesson = () => {
   const [lessons, setLesson] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
-  const [value, setValue] = useState(0);
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [topics, setTopic] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
-  // Lọc bài học theo tab
-  const filteredSkills = lessons.filter((lesson) => {
-    if (value === 0 && lesson.skill === 0) return true; // Listening
-    if (value === 1 && lesson.skill === 1) return true; // Speaking
-    if (value === 2 && lesson.skill === 2) return true; // Reading
-    if (value === 3 && lesson.skill === 3) return true; // Writing
-    return false;
-  });
 
-  const convertTrangThai = (skill) => {
-    const trangThaiMap = {
-      0: "Listening",
-      1: "Speaking",
-      2: "Reading",
-      3: "Writing",
-    };
-    return trangThaiMap[skill] || "Không xác định";
-  };
+  const [skill, setSkill] = useState(""); // Lọc theo độ khó
+  const [difficulty, setDifficulty] = useState(""); // Lọc theo độ khó
+
+  const filteredLesson = lessons.filter((lesson) => {
+    // Đối với dữ liệu là number
+    // const matchSkill =
+    // skill !== "" ? lesson.skill === Number(skill) : true;
+
+    const matchSkill = skill !== "" ? lesson.skill === skill : true;
+    const matchDifficulty =
+      difficulty !== "" ? lesson.difficulty_level === difficulty : true;
+
+    return matchSkill && matchDifficulty;
+  });
 
   const fetchTopics = async () => {
     try {
@@ -190,52 +187,70 @@ const Lesson = () => {
       console.error("Error deleting lesson:", error);
     }
   };
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <div>
       {/* Tab chọn trạng thái */}
-      <Tabs
-        className="tabstatus"
-        value={value}
-        onChange={handleChange}
-        aria-label="Lesson Status Tabs"
-      >
-        <Tab className="tabitem" label="Listening" />
-        <Tab className="tabitem" label="Speaking" />
-        <Tab className="tabitem" label="Reading" />
-        <Tab className="tabitem" label="Writing" />
-      </Tabs>
+      <div className="lesson-topbar">
+        <Box className="lesson-dropdown">
+          {/* Dropdown Lọc theo kỹ năng */}
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel>Kỹ năng</InputLabel>
+            <Select
+              value={skill}
+              onChange={(e) => setSkill(e.target.value)}
+              label="Kỹ năng"
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Listening">Nghe</MenuItem>
+              <MenuItem value="Speaking">Nói</MenuItem>
+              <MenuItem value="Reading">Đọc</MenuItem>
+              <MenuItem value="Writing">Viết</MenuItem>
+            </Select>
+          </FormControl>
 
-      {/* Tìm kiếm theo ngày */}
+          {/* Lọc theo độ khó */}
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel>Độ khó</InputLabel>
+            <Select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              label="Độ khó"
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Easy">Dễ</MenuItem>
+              <MenuItem value="Medium">Trung bình</MenuItem>
+              <MenuItem value="Hard">Khó</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        {/* Tìm kiếm theo ngày */}
 
-      <Box className="lesson-search-bar">
-        <TextField
-          className="lesson-search-start"
-          label="Ngày bắt đầu"
-          variant="outlined"
-          type="date"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <TextField
-          className="lesson-search-end"
-          label="Ngày kết thúc"
-          variant="outlined"
-          type="date"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-      </Box>
-
+        <Box className="lesson-search-bar">
+          <TextField
+            className="lesson-search-start"
+            label="Ngày bắt đầu"
+            variant="outlined"
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <TextField
+            className="lesson-search-end"
+            label="Ngày kết thúc"
+            variant="outlined"
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </Box>
+      </div>
       {/* Bảng bài học */}
       <TableContainer component={Paper} className="lesson-table-container">
         <Table aria-label="lesson table" className="lesson-table">
@@ -254,8 +269,8 @@ const Lesson = () => {
           </TableHead>
 
           <TableBody>
-            {filteredSkills.length > 0 ? (
-              filteredSkills.map((lesson) => (
+            {filteredLesson.length > 0 ? (
+              filteredLesson.map((lesson) => (
                 <TableRow key={lesson.lesson_id}>
                   <TableCell>{lesson.lesson_id}</TableCell>
                   <TableCell>{lesson.title}</TableCell>
@@ -269,13 +284,13 @@ const Lesson = () => {
                   <TableCell className="lesson-table-actions">
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(center)}
+                      onClick={() => handleEdit(lesson)}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
                       color="error"
-                      onClick={() => handleDelete(center.idBaihoc)}
+                      onClick={() => handleDelete(lesson.lesson_id)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -401,10 +416,16 @@ const Lesson = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleEditClose} color="secondary">
+          <Button
+            onClick={handleEditClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
-          <Button onClick={handleEditSubmit} color="primary">
+          <Button
+            onClick={handleEditSubmit}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
             Lưu lại
           </Button>
         </DialogActions>
@@ -496,12 +517,15 @@ const Lesson = () => {
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddClose} color="secondary">
+          <Button
+            onClick={handleAddClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedLesson)}
-            color="primary"
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
             Thêm
           </Button>

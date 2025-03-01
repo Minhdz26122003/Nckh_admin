@@ -89,7 +89,6 @@ const Topic = () => {
     setSearchTerm(event.target.value);
     // console.log("Search Term:", event.target.value);
   };
-  ////
 
   // THÊM CHỦ ĐỀ
   const handleAddSubmit = async (newTopic) => {
@@ -182,6 +181,7 @@ const Topic = () => {
   return (
     <div>
       {/* Thanh tìm kiếm */}
+
       <Box className="topic-search-bar">
         <TextField
           className="topic-search-text"
@@ -190,7 +190,7 @@ const Topic = () => {
           value={searchTerm}
           fullWidth
           onChange={handleSearch}
-          placeholder="Tìm kiếm theo tên dich vụ"
+          placeholder="Tìm kiếm theo tên dịch vụ"
         />
       </Box>
 
@@ -306,10 +306,16 @@ const Topic = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} color="secondary">
+          <Button
+            onClick={handleEditClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
-          <Button onClick={handleEditSubmit} color="primary">
+          <Button
+            onClick={handleEditSubmit}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
             Lưu
           </Button>
         </DialogActions>
@@ -343,12 +349,15 @@ const Topic = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddClose} color="secondary">
+          <Button
+            onClick={handleAddClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedTopic)}
-            color="primary"
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
             Thêm
           </Button>

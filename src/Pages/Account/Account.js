@@ -197,63 +197,65 @@ const Account = () => {
           placeholder="Tìm kiếm theo tên tài khoản"
         />
       </div>
-      <TableContainer component={Paper} className="account-table-container">
-        <Table aria-label="account table" className="account-table">
-          {/* Tiêu đề bảng */}
-          <TableHead className="head-account">
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Tên tài khoản</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Mật khẩu</TableCell>
-              <TableCell>Số điện thoại</TableCell>
-              <TableCell>Địa chỉ</TableCell>
-              <TableCell>Vai trò </TableCell>
-              <TableCell>Hành động</TableCell>
-            </TableRow>
-          </TableHead>
+      <div className="account-table-container">
+        <TableContainer component={Paper}>
+          <Table className="account-table">
+            {/* Tiêu đề bảng */}
+            <TableHead className="head-account">
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Tên tài khoản</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Mật khẩu</TableCell>
+                <TableCell>Số điện thoại</TableCell>
+                <TableCell>Địa chỉ</TableCell>
+                <TableCell>Vai trò </TableCell>
+                <TableCell>Hành động</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {accounts && accounts.length > 0 ? (
-              accounts.map((account) => (
-                <TableRow key={account.iduser}>
-                  <TableCell>{account.iduser}</TableCell>
-                  <TableCell>{account.username}</TableCell>
-                  <TableCell>{account.email}</TableCell>
-                  <TableCell>{account.password}</TableCell>
-                  <TableCell>{account.sodienthoai}</TableCell>
-                  <TableCell>{account.diachi}</TableCell>
-                  <TableCell>{roleMapping[account.vaitro]}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(account)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    {/* <IconButton
+            <TableBody>
+              {accounts && accounts.length > 0 ? (
+                accounts.map((account) => (
+                  <TableRow key={account.iduser}>
+                    <TableCell>{account.iduser}</TableCell>
+                    <TableCell>{account.username}</TableCell>
+                    <TableCell>{account.email}</TableCell>
+                    <TableCell>{account.password}</TableCell>
+                    <TableCell>{account.sodienthoai}</TableCell>
+                    <TableCell>{account.diachi}</TableCell>
+                    <TableCell>{roleMapping[account.vaitro]}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEdit(account)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      {/* <IconButton
                       color="error"
                       // onClick={() => handleDelete(account.iduser)}
                     >
                       <DeleteIcon />
                     </IconButton> */}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={8} align="center">
+                    Không có tài khoản nào được tìm thấy
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8} align="center">
-                  Không có tài khoản nào được tìm thấy
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
 
       {/* Dialog sửa*/}
       <Dialog open={openEdit} onClose={handleEditClose}>
-        <DialogTitle>Edit Account</DialogTitle>
+        <DialogTitle>Sửa tài khoản</DialogTitle>
         <DialogContent>
           {selectedAccount && (
             <>
@@ -338,18 +340,24 @@ const Account = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} color="secondary">
-            Cancel
+          <Button
+            onClick={handleEditClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
+            Trở lại
           </Button>
-          <Button onClick={handleEditSubmit} color="primary">
-            Save
+          <Button
+            onClick={handleEditSubmit}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
+            Lưu lại
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Dialog thêm */}
       <Dialog open={openAdd} onClose={handleAddClose}>
-        <DialogTitle>Add Account</DialogTitle>
+        <DialogTitle>Thêm tài khoản</DialogTitle>
         <DialogContent>
           <TextField
             label="Tên tài khoản"
@@ -426,14 +434,17 @@ const Account = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleAddClose} color="secondary">
-            Cancel
+          <Button
+            onClick={handleAddClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
+            Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedAccount)}
-            color="primary"
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
-            Add
+            Thêm
           </Button>
         </DialogActions>
       </Dialog>

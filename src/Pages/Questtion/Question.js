@@ -184,100 +184,82 @@ const Question = () => {
 
   return (
     <div>
-      <Box display="flex" gap={2} mt={2} className="quest-filter">
-        {/* <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>Kỹ năng</InputLabel>
-          <Select
-            value={value}
-            onChange={(e) =>
-              setSkill(e.target.value === "" ? "" : Number(e.target.value))
-            } // Chuyển đổi về số
-            label="Kỹ năng"
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            <MenuItem value={0}>chờ xác nhận</MenuItem>
-            <MenuItem value={1}>Đang thực hiện</MenuItem>
-            <MenuItem value={2}>Hoàn thành</MenuItem>
-            <MenuItem value={3}>Đã thanh toán</MenuItem>
-            <MenuItem value={4}>Đã hủy</MenuItem>
-          </Select>
-        </FormControl> */}
+      <div className="quest-topbar">
+        <Box className="quest-dropdown">
+          {/* Dropdown Lọc theo kỹ năng */}
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel>Kỹ năng</InputLabel>
+            <Select
+              value={skill}
+              onChange={(e) => setSkill(e.target.value)}
+              label="Kỹ năng"
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Listening">Nghe</MenuItem>
+              <MenuItem value="Speaking">Nói</MenuItem>
+              <MenuItem value="Reading">Đọc</MenuItem>
+              <MenuItem value="Writing">Viết</MenuItem>
+            </Select>
+          </FormControl>
 
-        {/* Dropdown Lọc theo kỹ năng */}
-        <FormControl style={{ minWidth: 200 }}>
-          <InputLabel>Kỹ năng</InputLabel>
-          <Select
-            value={skill}
-            onChange={(e) => setSkill(e.target.value)}
-            label="Kỹ năng"
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            <MenuItem value="Listening">Nghe</MenuItem>
-            <MenuItem value="Speaking">Nói</MenuItem>
-            <MenuItem value="Reading">Đọc</MenuItem>
-            <MenuItem value="Writing">Viết</MenuItem>
-          </Select>
-        </FormControl>
+          {/* Lọc theo độ khó */}
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel>Độ khó</InputLabel>
+            <Select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              label="Độ khó"
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Easy">Dễ</MenuItem>
+              <MenuItem value="Medium">Trung bình</MenuItem>
+              <MenuItem value="Hard">Khó</MenuItem>
+            </Select>
+          </FormControl>
 
-        {/* Lọc theo độ khó */}
-        <FormControl style={{ minWidth: 200 }}>
-          <InputLabel>Độ khó</InputLabel>
-          <Select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            label="Độ khó"
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            <MenuItem value="Easy">Dễ</MenuItem>
-            <MenuItem value="Medium">Trung bình</MenuItem>
-            <MenuItem value="Hard">Khó</MenuItem>
-          </Select>
-        </FormControl>
-
-        {/* Lọc theo loại câu hỏi */}
-        <FormControl style={{ minWidth: 200 }}>
-          <InputLabel>Loại câu hỏi</InputLabel>
-          <Select
-            value={questionType}
-            onChange={(e) => setQuestionType(e.target.value)}
-            label="Loại câu hỏi "
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            <MenuItem value="Multiple Choice">Trắc nghiệm</MenuItem>
-            <MenuItem value="True/False">Đúng/Sai</MenuItem>
-            <MenuItem value="Short Answer">Trả lời ngắn</MenuItem>
-            <MenuItem value="Essay">Tự luận</MenuItem>
-            <MenuItem value="Listening">Nghe</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      {/* Tìm kiếm theo ngày */}
-
-      <Box className="quest-search-bar">
-        <TextField
-          className="quest-search-start"
-          label="Ngày bắt đầu"
-          variant="outlined"
-          type="date"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <TextField
-          className="quest-search-end"
-          label="Ngày kết thúc"
-          variant="outlined"
-          type="date"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-      </Box>
-
+          {/* Lọc theo loại câu hỏi */}
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel>Loại câu hỏi</InputLabel>
+            <Select
+              value={questionType}
+              onChange={(e) => setQuestionType(e.target.value)}
+              label="Loại câu hỏi"
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Multiple Choice">Trắc nghiệm</MenuItem>
+              <MenuItem value="True/False">Đúng/Sai</MenuItem>
+              <MenuItem value="Short Answer">Trả lời ngắn</MenuItem>
+              <MenuItem value="Essay">Tự luận</MenuItem>
+              <MenuItem value="Listening">Nghe</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        {/* Tìm kiếm theo ngày */}
+        <Box className="quest-search-bar">
+          <TextField
+            className="quest-search-start"
+            label="Ngày bắt đầu"
+            variant="outlined"
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <TextField
+            className="quest-search-end"
+            label="Ngày kết thúc"
+            variant="outlined"
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </Box>
+      </div>
       {/* Bảng câu hỏi */}
       <TableContainer component={Paper} className="quest-table-container">
         <Table aria-label="quest table" className="quest-table">
@@ -489,10 +471,16 @@ const Question = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleEditClose} color="secondary">
+          <Button
+            onClick={handleEditClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
-          <Button onClick={handleEditSubmit} color="primary">
+          <Button
+            onClick={handleEditSubmit}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
             Lưu lại
           </Button>
         </DialogActions>
@@ -616,12 +604,15 @@ const Question = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddClose} color="secondary">
+          <Button
+            onClick={handleAddClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedQuesttion)}
-            color="primary"
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
             Thêm
           </Button>

@@ -1,36 +1,40 @@
-/* Định dạng bảng */
+/* Container bảng: chiếm toàn bộ chiều ngang của vùng chứa */
 .lessques-table-container {
-  position: static;
-  margin-left: 170px;
-  max-width: calc(100% - 170px);
-  margin-top: -10px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+.label {
+  padding-top: 10px;
+}
+/* Header bảng */
 .head-lessques th {
-  background-color: rgb(236, 209, 210);
   font-weight: bold;
   font-size: 16px;
+  background-color: #c4c4c4;
+  color: #000000;
 }
+
+/* Bảng */
 .lessques-table {
+  width: 100%;
   border-collapse: collapse;
 }
-.lessques-search-bar {
-  position: static;
-  max-width: calc(100% - 170px);
-  background-color: aliceblue;
-  left: 170px;
-  top: -20px;
-}
+
+/* Padding cho các ô */
 .lessques-table th,
 .lessques-table td {
   padding: 12px;
   text-align: left;
 }
 
+/* Hành động */
 .lessques-table-actions {
   display: flex;
   justify-content: space-around;
 }
 
+/* Các phần hộp thoại nếu có */
 .dialog-title {
   font-size: 20px;
   font-weight: bold;
@@ -44,6 +48,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+/* Label cho select (nếu có) */
 .select-center-label {
   width: 100%;
 }

@@ -1,76 +1,92 @@
 /* Sidebar container */
 .sidebar-container {
-  margin: 5px 0px 50px 10px;
   width: 250px;
-  border-radius: 15px;
-  overflow: hidden;
-
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  background-color: #242c44;
+  overflow-x: hidden;
 }
+
+/* Sidebar */
 .siderbar {
-  height: 100vh;
-
-  background: linear-gradient(
-    106.37deg,
-    #f3f3f3 29.63%,
-    #ffffff 51.55%,
-    #fddfdf 90.85%
-  );
+  height: 100%;
+  background-color: #242c44;
 }
 
-/* Mục Sidebar */
+/* Chỉnh lại phần logo */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 30px 5px 20px;
+  background-color: #2e3547;
+}
+
+/* Chữ Dashboard */
+.dashboard-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Logo */
+.logo-image {
+  width: 20px;
+  height: auto;
+}
+
+/* Sidebar items */
 .sidebar-item {
   display: flex;
-
   align-items: center;
-  padding: 10px 20px;
-  background-color: inherit;
-  color: inherit;
+  padding: 12px 20px;
+  margin-left: 5px;
+  color: white;
   font-size: 1rem;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .sidebar-item:hover {
-  background-color: rgba(211, 210, 210, 0.6);
-  transform: translateX(10px);
-  color: #1976d2;
-}
+  color: #1e88e5;
+  background-color: rgba(255, 255, 255, 0.1);
 
-/* Mục Sidebar active */
-.sidebar-item.active {
-  background-color: #d8d8d8;
-  color: #1976d2;
   font-weight: bold;
-  transform: translateX(10px);
-  box-shadow: inset 5px 0 0 #1976d2;
+}
+.sidebar-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+  font-weight: bold;
 }
 
 /* Icon */
 .sidebar-icon {
   margin-right: 10px;
-  color: inherit;
+  color: white;
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
 /* Icon active */
 .sidebar-icon.active {
-  color: #1976d2;
+  color: white;
   transform: scale(1.2);
 }
 
-.sidebar-icon:hover {
-  /* transform: rotate(360deg); */
-  transform: scale(1.2);
+.sidebar-item:hover .sidebar-icon {
+  color: #1e88e5;
 }
 
-/* Text */
-.sidebar-item .MuiListItemText-root {
-  transition: opacity 0.3s ease;
+.sidebar-item .MuiListItemIcon-root {
+  color: white !important;
 }
 
-.sidebar-item:hover .MuiListItemText-root {
-  opacity: 1;
+/* Icon khi active */
+.sidebar-item.active .MuiListItemIcon-root {
+  color: white !important;
+}
+
+/* Icon khi hover */
+.sidebar-item:hover .MuiListItemIcon-root {
+  color: #1e88e5 !important;
 }

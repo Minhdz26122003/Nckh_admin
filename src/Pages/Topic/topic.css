@@ -1,53 +1,55 @@
-/* Định dạng bảng */
-.topic-table-container {
-  position: static;
-  margin-left: 170px;
-  max-width: calc(100% - 170px);
-  margin-top: 10px;
-}
-.head-topic th {
-  background-color: rgb(161, 162, 162);
-  font-weight: bold;
-  font-size: 16px;
-}
-.topic-table {
-  border-collapse: collapse;
-}
+/* Thanh tìm kiếm */
 .topic-search-bar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-left: 170px;
-  background-color: aliceblue;
-  max-width: calc(100% - 170px);
+
+  padding: 10px 0px 0px 0px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  width: 100%;
 }
-.search-text {
-  padding-left: 20px;
-}
+
+/* TextField chỉnh lại để chiếm toàn bộ chiều ngang */
 .topic-search-text {
-  padding-left: 100px;
-  margin-left: 40px;
   flex: 1;
 }
 
-.topic-search-price {
-  margin: 20px;
-  max-width: 300px;
+/* Container bảng */
+.topic-table-container {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
+/* Bảng */
+.topic-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header bảng */
+.head-topic th {
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #c4c4c4;
+  color: #000000;
+}
+
+/* Các cell */
 .topic-table th,
 .topic-table td {
   padding: 12px;
   text-align: left;
 }
 
+/* Hành động */
 .topic-table-actions {
   display: flex;
   justify-content: space-around;
 }
 
+/* Hộp thoại (nếu có) */
 .dialog-title {
   font-size: 20px;
   font-weight: bold;

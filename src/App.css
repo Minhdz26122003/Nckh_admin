@@ -15,9 +15,7 @@
 .App {
   /* padding: 0.5rem 3.5rem; */
   color: var(--black);
-
-  background: linear-gradient(135deg, #85d7f2, #66a8ff);
-
+  background: linear-gradient(135deg, hsl(0, 0%, 100%), #ffffff);
   height: 100vh;
   display: flex;
   align-items: center;
@@ -36,7 +34,7 @@
   border-radius: 2rem;
   gap: 16px;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   /* margin-left: 280px; */
   margin-right: 10px;
 }

@@ -4,41 +4,51 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Select,
-  MenuItem,
   Alert,
   Typography,
-  Paper,
   Box,
   TextField,
   Button,
   Avatar,
   Grid,
   Snackbar,
+  Paper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import bg from "../../assets/image/bg-profile.jpeg";
+import avar from "../../assets/image/team-2.jpg";
 import url from "../../ipconfixad";
+
 const Profile = ({ user }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+
+  // State dialog, snackbar
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
+
+  // State đổi mật khẩu
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  // State account được chọn để sửa
   const [selectedAccount, setSelectedAccount] = useState({
     username: "",
     email: "",
-    password: "",
     sodienthoai: "",
     diachi: "",
   });
+
   useEffect(() => {
     if (user) {
       setUsername(user?.username || "");
@@ -48,6 +58,7 @@ const Profile = ({ user }) => {
     }
   }, [user]);
 
+  // Xử lý mở/đóng Dialog Sửa
   const handleEdit = () => {
     setSelectedAccount({
       username,
@@ -57,11 +68,11 @@ const Profile = ({ user }) => {
     });
     setOpenEdit(true);
   };
-
   const handleEditClose = () => {
     setOpenEdit(false);
   };
 
+  // Submit sửa thông tin
   const handleEditSubmit = async () => {
     try {
       const response = await axios.put(`${url}myapi/Taikhoan/suataikhoan.php`, {
@@ -86,11 +97,14 @@ const Profile = ({ user }) => {
     }
   };
 
+  // Xử lý logout sau khi sửa
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("username");
     localStorage.removeItem("rememberMe");
   };
+
+  // Dialog đổi mật khẩu
   const handleOpenDialog = () => setDialogOpen(true);
   const handleCloseDialog = () => setDialogOpen(false);
 
@@ -103,14 +117,12 @@ const Profile = ({ user }) => {
       setError("Mật khẩu xác nhận không khớp.");
       return;
     }
-    setError(""); // Xóa lỗi nếu có
+    setError("");
 
     try {
       const response = await fetch(`${url}myapi/Taikhoan/dmk.php`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           iduser: user.id,
           currentPassword,
@@ -119,7 +131,6 @@ const Profile = ({ user }) => {
       });
 
       const data = await response.json();
-
       if (data.success) {
         setSnackbarMessage("Đổi mật khẩu thành công!");
       } else {
@@ -142,70 +153,129 @@ const Profile = ({ user }) => {
   }
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        padding: 4,
-        maxWidth: 800,
-        margin: "auto",
-        marginTop: 4,
-        borderRadius: 3,
-        textAlign: "center",
-      }}
-    >
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="h5">Thông Tin Tài Khoản</Typography>
-        <Avatar sx={{ margin: "10px auto", width: 100, height: 100 }} />
-        <Typography variant="h6">{username}</Typography>
-      </Box>
-
-      {/* Nút sửa thông tin và đổi mật khẩu */}
+    <Box sx={{ maxWidth: "1200px", margin: "0 auto", p: 2 }}>
+      {/* Ảnh bìa (Cover Image) */}
       <Box
-        sx={{ display: "flex", justifyContent: "center", gap: 2, marginTop: 2 }}
+        sx={{
+          position: "relative",
+          height: 200,
+          backgroundImage: `url(${bg})`, // Sử dụng url(...) kèm template literal
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          borderRadius: 2,
+          boxShadow: 1,
+        }}
       >
-        <Button
-          onClick={handleEdit}
-          color="secondary"
+        {/* Avatar chồng lên ảnh bìa */}
+        <Box
           sx={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            backgroundColor: "#009900",
-            color: "#fff", // Màu chữ
-            "&:hover": {
-              backgroundColor: "#FF9900",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            },
-            textTransform: "none",
-            transition: "all 0.3s ease",
+            position: "absolute",
+            bottom: "-120px",
+            left: "10%",
+            transform: "translateX(-50%)",
           }}
         >
-          Sửa thông tin cá nhân
-        </Button>
-
-        <Button
-          onClick={handleOpenDialog}
-          color="secondary"
-          sx={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            backgroundColor: "#009900",
-            color: "#fff",
-            "&:hover": {
-              backgroundColor: "#FF9900",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            },
-            textTransform: "none",
-            transition: "all 0.3s ease",
-          }}
-        >
-          Đổi mật khẩu
-        </Button>
+          <Avatar
+            sx={{ width: 150, height: 150, border: "3px solid white" }}
+            src={avar}
+          />
+          {/* Tên người dùng */}
+          <Box sx={{ textAlign: "start", ml: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              {username || "User Name"}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {email || "example@gmail.com"}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
 
-      {/* Dialog đổi mật khẩu */}
+      {/* Khu vực thông tin chính */}
+      <Paper
+        sx={{
+          mt: 8,
+          p: 3,
+          borderRadius: 2,
+          boxShadow: 1,
+        }}
+      >
+        {/* Nút Sửa & Đổi mật khẩu bên phải */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#1976d2",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#1565c0",
+              },
+            }}
+            onClick={handleEdit}
+          >
+            Sửa thông tin
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#2e7d32",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#1b5e20",
+              },
+            }}
+            onClick={handleOpenDialog}
+          >
+            Đổi mật khẩu
+          </Button>
+        </Box>
 
+        {/* Thông tin chi tiết */}
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: "normal", fontSize: 20 }}
+            >
+              Thông tin cơ bản
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <Typography sx={{ mt: 2 }}>
+                <strong>Tên đăng nhập:</strong> {username}
+              </Typography>
+              <Typography sx={{ mt: 1 }}>
+                <strong>Địa chỉ:</strong> {address}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: "normal", fontSize: 20 }}
+            >
+              Liên hệ
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <Typography sx={{ mt: 2 }}>
+                <strong>Email:</strong> {email}
+              </Typography>
+              <Typography sx={{ mt: 1 }}>
+                <strong>Số điện thoại:</strong> {phone}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Dialog Đổi mật khẩu */}
       <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Đổi Mật Khẩu</DialogTitle>
         <DialogContent>
@@ -244,56 +314,10 @@ const Profile = ({ user }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* Thông tin cơ bản */}
-      <Grid container spacing={3} sx={{ marginTop: 3 }}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={1} sx={{ padding: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Thông tin cơ bản
-            </Typography>
-            <Typography>
-              <strong>Tên đăng nhập:</strong> {username}
-            </Typography>
-            <Typography>
-              <strong>Địa chỉ:</strong> {address}
-            </Typography>
-          </Paper>
-        </Grid>
 
-        {/* Liên hệ */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={1} sx={{ padding: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Liên hệ
-            </Typography>
-            <Typography>
-              <strong>Email:</strong> {email}
-            </Typography>
-            <Typography>
-              <strong>Số điện thoại:</strong> {phone}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Snackbar hiển thị thông báo */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert
-          severity={
-            snackbarMessage.includes("thành công") ? "success" : "error"
-          }
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-
-      {/* Dialog sửa*/}
+      {/* Dialog Sửa thông tin */}
       <Dialog open={openEdit} onClose={handleEditClose}>
-        <DialogTitle>Edit Account</DialogTitle>
+        <DialogTitle>Sửa thông tin cá nhân</DialogTitle>
         <DialogContent>
           {selectedAccount && (
             <>
@@ -321,7 +345,6 @@ const Profile = ({ user }) => {
                   })
                 }
               />
-
               <TextField
                 label="Phone"
                 fullWidth
@@ -351,14 +374,29 @@ const Profile = ({ user }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose} color="warning">
-            Cancel
+            Hủy
           </Button>
           <Button onClick={handleEditSubmit} color="primary">
             Lưu thông tin
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+
+      {/* Snackbar Thông báo */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <Alert
+          severity={
+            snackbarMessage.includes("thành công") ? "success" : "error"
+          }
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 };
 
