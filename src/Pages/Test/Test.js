@@ -27,6 +27,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
+import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 import url from "../../ipconfixad";
 import "./Test.css";
@@ -39,11 +40,34 @@ const TestManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficulty, setDifficulty] = useState("");
 
+  // State phân trang
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
+  });
   const filteredtests = tests.filter((test) => {
     const matchDifficulty =
       difficulty !== "" ? test.difficulty_level === difficulty : true;
     return matchDifficulty;
   });
+
+  // const fetch = async (page = 1, limit = 10) => {
+  //   let endpoint = `${url}myapi/T/getAll?page=${page}&limit=${limit}`;
+  //
+  //   try {
+  //     const response = await axios.get(endpoint);
+  //     // Ví dụ: response.data có cấu trúc { t, totalT, totalPages, currentPage }
+  //     setT(response.data.t);
+  //     // Bạn có thể lưu thêm state cho phân trang (totalPages, currentPage) để hiển thị nút chuyển trang
+  //     setPagination({
+  //       totalPages: response.data.totalPages,
+  //       currentPage: response.data.currentPage,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error fetching t", error);
+  //   }
+  // };
 
   // Hàm lấy dữ liệu bài kiểm tra
   const fetchTest = async () => {
@@ -82,6 +106,11 @@ const TestManagement = () => {
     setSearchTerm(event.target.value);
   };
 
+  // Xử lý thay đổi trang khi người dùng nhấn nút phân trang
+  // const handlePageChange = (event, value) => {
+  //     fetchTests(value);
+  // };
+
   // Kiểm tra dữ liệu nhập
   const checkData = (test) => {
     if (!test || !test.title || !test.duration || !test.difficulty_level) {
@@ -102,6 +131,7 @@ const TestManagement = () => {
       }
       setOpenAdd(false);
       fetchTest();
+      //   fetchTests(pagination.currentPage);
     } catch (error) {
       console.error("Error adding test:", error);
     }
@@ -124,6 +154,7 @@ const TestManagement = () => {
       await axios.put(`${url}myapi/Test/suaTest`, selectedTest);
       setOpenEdit(false);
       fetchTest();
+      //   fetchTests(pagination.currentPage);
     } catch (error) {
       console.error("Error updating test:", error);
     }
@@ -149,6 +180,7 @@ const TestManagement = () => {
       await axios.delete(`${url}myapi/Test/xoaTest`, {
         data: { test_id },
       });
+      //   fetchTests(pagination.currentPage);
       setTests(tests.filter((test) => test.test_id !== test_id));
     } catch (error) {
       console.error("Error deleting test:", error);
@@ -236,7 +268,20 @@ const TestManagement = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      {/* Nút phân trang hiển thị trang hiện tại */}
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Pagination
+          count={pagination.totalPages}
+          page={pagination.currentPage}
+          //   onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       {/* Dialog Sửa  */}
       <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa bài kiểm tra</DialogTitle>

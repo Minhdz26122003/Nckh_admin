@@ -28,7 +28,7 @@ import {
   Check as CheckIcon,
   BorderAll,
 } from "@mui/icons-material";
-
+import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 import "../Questtion/Question.css"; // Import style riêng
 import url from "../../ipconfixad";
@@ -45,6 +45,13 @@ const Question = () => {
   const [skill, setSkill] = useState(""); // Lọc theo độ khó
   const [difficulty, setDifficulty] = useState(""); // Lọc theo độ khó
   const [questionType, setQuestionType] = useState(""); // Lọc theo loại câu hỏi
+
+  // State phân trang
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
+  });
 
   const filteredQuestion = questions.filter((question) => {
     // Đối với dữ liệu là number
@@ -320,7 +327,19 @@ const Question = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Pagination
+          count={pagination.totalPages}
+          page={pagination.currentPage}
+          //   onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       {/* Dialog sửa*/}
       <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa câu hỏi</DialogTitle>

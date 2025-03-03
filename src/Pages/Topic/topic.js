@@ -24,6 +24,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
+import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 import "./topic.css";
 import url from "../../ipconfixad.js";
@@ -38,7 +39,12 @@ const Topic = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  // State phân trang
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
+  });
   const [expandedRows, setExpandedRows] = useState({});
 
   useEffect(() => {
@@ -271,7 +277,19 @@ const Topic = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Pagination
+          count={pagination.totalPages}
+          page={pagination.currentPage}
+          //   onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       {/* Dialog sửa*/}
       <Dialog open={openEdit} onClose={handleEditClose}>
         <DialogTitle>Sửa chủ đề</DialogTitle>

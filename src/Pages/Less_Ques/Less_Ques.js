@@ -27,18 +27,22 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material";
 import axios from "axios";
+import Pagination from "@mui/material/Pagination";
 import "./Less_Ques.css"; // Import style riêng
 import url from "../../ipconfixad.js";
 
 const Less_Ques = () => {
   const [lessonQuestion, setLessonQuestion] = useState([]);
-  const [selectedLessonQuestion, setSelectedLessonQuestion] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setselectedQuestion] = useState(null);
   const [selectedLesson, setselectedLesson] = useState(null);
   const [openAdd, setOpenAdd] = useState(false);
-
+  // State phân trang
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
+  });
   useEffect(() => {
     fetchLessonQuestion();
     fetchLessons();
@@ -181,7 +185,19 @@ const Less_Ques = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Pagination
+          count={pagination.totalPages}
+          page={pagination.currentPage}
+          //   onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       {/* Dialog thêm */}
       <Dialog fullWidth maxWidth="md" open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Thêm câu hỏi</DialogTitle>

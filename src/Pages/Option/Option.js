@@ -29,6 +29,7 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material";
 import axios from "axios";
+import Pagination from "@mui/material/Pagination";
 import "./Option.css";
 import url from "../../ipconfixad.js";
 
@@ -47,7 +48,12 @@ const Option = () => {
   // Bộ lọc: "all" = tất cả, "true" = đúng, "false" = sai
 
   const [expandedRows, setExpandedRows] = useState({});
-
+  // State phân trang
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
+  });
   useEffect(() => {
     fetchOptions();
     fetchQuestion();
@@ -297,7 +303,19 @@ const Option = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Pagination
+          count={pagination.totalPages}
+          page={pagination.currentPage}
+          //   onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       {/* Dialog Sửa Option */}
       <Dialog open={openEdit} onClose={handleEditClose} maxWidth="md" fullWidth>
         <DialogTitle>Sửa Option</DialogTitle>
