@@ -17,6 +17,7 @@ import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 import HelpCenterRoundedIcon from "@mui/icons-material/HelpCenterRounded";
 import DynamicFeedRoundedIcon from "@mui/icons-material/DynamicFeedRounded";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import { Link, useLocation } from "react-router-dom";
 import img from "../../assets/image/logo-ct.png";
 
@@ -37,6 +38,7 @@ const Sidebar = ({ onMenuClick, isSidebarOpen }) => {
 
     // { text: "Câu hỏi của bài kiểm tra", icon: <PaidIcon />, link: "/payment" },
     { text: "Option", icon: <DisplaySettingsIcon />, link: "/option" },
+    { text: "Test", icon: <EditNoteIcon />, link: "/test" },
   ];
   return (
     <Drawer

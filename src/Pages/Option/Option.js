@@ -200,7 +200,7 @@ const Option = () => {
       {/* Thanh tìm kiếm và bộ lọc */}
       <Box className="option-topbar">
         <TextField
-          label="Tìm kiếm Option"
+          label="Tìm kiếm câu hỏi"
           className="option-search-bar"
           variant="outlined"
           fullWidth

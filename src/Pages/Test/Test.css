@@ -1,5 +1,5 @@
 /* Container cho Tab và thanh tìm kiếm */
-.option-topbar {
+.test-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,7 +11,9 @@
 .MuiTabs-root .MuiTab-root.Mui-selected {
   background-color: #9fbef7;
 }
-
+.label {
+  margin-top: 10px;
+}
 .tabstatus {
   margin-left: -170px;
 }
@@ -30,30 +32,30 @@
 }
 
 /* Thanh tìm kiếm */
-.option-dropdown {
+.test-dropdown {
   background-color: rgb(245, 253, 255);
 }
 
 /* Các ô nhập date */
-.option-search-start,
-.option-search-end {
+.test-search-start,
+.test-search-end {
   width: 180px;
 }
 
 /* Container bảng */
-.option-table-container {
+.test-table-container {
   width: 100%;
   margin-bottom: 10px;
 }
 
 /* Bảng */
-.option-table {
+.test-table {
   width: 100%;
   border-collapse: collapse;
 }
 
 /* Header bảng */
-.head-option th {
+.head-test th {
   background-color: #c4c4c4;
   color: #000000;
   font-weight: bold;
@@ -61,22 +63,22 @@
 }
 
 /* Các cell */
-.option-table th,
-.option-table td {
+.test-table th,
+.test-table td {
   padding: 12px;
   text-align: left;
 }
 
 /* Zebra striping cho các hàng */
-.option-table tbody tr:nth-of-type(odd) {
+.test-table tbody tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
-.option-table tbody tr:nth-of-type(even) {
+.test-table tbody tr:nth-of-type(even) {
   background-color: #fff;
 }
 
 /* Cột hành động */
-.option-table-actions {
+.test-table-actions {
   display: flex;
   justify-content: space-around;
 }
@@ -86,13 +88,12 @@
   font-size: 20px;
   font-weight: bold;
 }
-.label {
-  margin-top: 10px;
-}
+
 .dialog-content {
   margin-top: 10px;
 }
-
+.dialogadd {
+}
 .dialog-actions {
   display: flex;
   justify-content: flex-end;

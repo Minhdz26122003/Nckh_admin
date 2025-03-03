@@ -17,6 +17,7 @@ import Login from "./Pages/Login/Login";
 import Lessques from "./Pages/Less_Ques/Less_Ques";
 import Question from "./Pages/Questtion/Question";
 import Option from "./Pages/Option/Option";
+import Test from "./Pages/Test/Test";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -136,6 +137,10 @@ function App() {
                 <Route
                   path="/option"
                   element={<PrivateRoute element={<Option />} />}
+                />
+                <Route
+                  path="/test"
+                  element={<PrivateRoute element={<Test />} />}
                 />
                 <Route
                   path="/profile"
