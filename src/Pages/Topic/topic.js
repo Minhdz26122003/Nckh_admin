@@ -219,7 +219,7 @@ const Topic = () => {
                       <>
                         {topic.description}{" "}
                         <Button
-                          color="primary"
+                          color="error"
                           size="small"
                           onClick={() => toggleExpand(topic.topic_id)}
                         >
@@ -233,7 +233,7 @@ const Topic = () => {
                           : topic.description}
                         {topic.description.length > 100 && (
                           <Button
-                            color="primary"
+                            color="error"
                             size="small"
                             onClick={() => toggleExpand(topic.topic_id)}
                           >

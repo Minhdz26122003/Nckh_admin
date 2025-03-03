@@ -254,7 +254,7 @@ const Account = () => {
       </div>
 
       {/* Dialog sửa*/}
-      <Dialog open={openEdit} onClose={handleEditClose}>
+      <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa tài khoản</DialogTitle>
         <DialogContent>
           {selectedAccount && (

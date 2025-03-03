@@ -153,12 +153,12 @@ const Profile = ({ user }) => {
   }
 
   return (
-    <Box sx={{ maxWidth: "1200px", margin: "0 auto", p: 2 }}>
+    <Box sx={{ maxWidth: "1290px", margin: "0 auto", p: 2 }}>
       {/* Ảnh bìa (Cover Image) */}
       <Box
         sx={{
           position: "relative",
-          height: 200,
+          height: 300,
           backgroundImage: `url(${bg})`, // Sử dụng url(...) kèm template literal
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -306,10 +306,16 @@ const Profile = ({ user }) => {
           {error && <Typography color="error">{error}</Typography>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="warning">
+          <Button
+            onClick={handleCloseDialog}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Hủy
           </Button>
-          <Button onClick={handleChangePassword} color="primary">
+          <Button
+            onClick={handleChangePassword}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
             Đổi Mật Khẩu
           </Button>
         </DialogActions>
@@ -373,10 +379,16 @@ const Profile = ({ user }) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} color="warning">
+          <Button
+            onClick={handleEditClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
             Hủy
           </Button>
-          <Button onClick={handleEditSubmit} color="primary">
+          <Button
+            onClick={handleEditSubmit}
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+          >
             Lưu thông tin
           </Button>
         </DialogActions>

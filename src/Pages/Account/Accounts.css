@@ -12,16 +12,14 @@
 .account-search-bar {
   background-color: rgb(255, 255, 255);
 }
-.account-search-container {
-  margin-bottom: 10px;
-}
+
 .account-table {
   border-collapse: collapse;
 }
 
 .account-table th,
 .account-table td {
-  padding: 10px;
+  padding: 12px;
   text-align: left;
 }
 

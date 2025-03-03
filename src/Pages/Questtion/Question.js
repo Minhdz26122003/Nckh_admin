@@ -322,7 +322,7 @@ const Question = () => {
       </TableContainer>
 
       {/* Dialog sửa*/}
-      <Dialog open={openEdit} onClose={handleEditClose}>
+      <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa câu hỏi</DialogTitle>
         <DialogContent>
           {selectedQuesttion && (
@@ -487,7 +487,7 @@ const Question = () => {
       </Dialog>
 
       {/* Dialog thêm */}
-      <Dialog open={openAdd} onClose={handleAddClose}>
+      <Dialog open={openAdd} onClose={handleAddClose} fullWidth maxWidth="md">
         <DialogTitle>Thêm câu hỏi</DialogTitle>
         <DialogContent>
           <TextField

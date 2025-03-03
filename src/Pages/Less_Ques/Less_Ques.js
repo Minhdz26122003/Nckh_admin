@@ -183,7 +183,7 @@ const Less_Ques = () => {
       </TableContainer>
 
       {/* Dialog thêm */}
-      <Dialog fullWidth maxWidth="xs" open={openAdd} onClose={handleAddClose}>
+      <Dialog fullWidth maxWidth="md" open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Thêm câu hỏi</DialogTitle>
         <DialogContent>
           <InputLabel className="label">Bài học</InputLabel>
@@ -231,12 +231,15 @@ const Less_Ques = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleAddClose} color="secondary">
-            Hủy
+          <Button
+            onClick={handleAddClose}
+            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+          >
+            Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedLesson)}
-            color="primary"
+            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
             Thêm
           </Button>

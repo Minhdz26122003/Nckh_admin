@@ -16,6 +16,7 @@ import Profile from "./Pages/Profile/profile";
 import Login from "./Pages/Login/Login";
 import Lessques from "./Pages/Less_Ques/Less_Ques";
 import Question from "./Pages/Questtion/Question";
+import Option from "./Pages/Option/Option";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -65,11 +66,11 @@ function App() {
       localStorage.removeItem("username");
       localStorage.removeItem("rememberMe");
       localStorage.removeItem("password");
+
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("username");
     } else {
       sessionStorage.removeItem("user");
-
       sessionStorage.removeItem("username");
     }
   };
@@ -132,19 +133,10 @@ function App() {
                   path="/question"
                   element={<PrivateRoute element={<Question />} />}
                 />
-                {/*<Route
-                path="/sale"
-                element={<PrivateRoute element={<Sale />} />}
-              /> */}
-                {/* 
-              <Route
-                path="/payment"
-                element={<PrivateRoute element={<Payment />} />}
-              />
-              <Route
-                path="/review"
-                element={<PrivateRoute element={<Review />} />}
-              /> */}
+                <Route
+                  path="/option"
+                  element={<PrivateRoute element={<Option />} />}
+                />
                 <Route
                   path="/profile"
                   element={<PrivateRoute element={<Profile user={user} />} />}

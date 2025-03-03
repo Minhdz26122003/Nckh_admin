@@ -1,0 +1,98 @@
+/* Container cho Tab và thanh tìm kiếm */
+.option-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+/* Tab khi được chọn */
+.MuiTabs-root .MuiTab-root.Mui-selected {
+  background-color: #9fbef7;
+}
+
+.tabstatus {
+  margin-left: -170px;
+}
+/* Tab item */
+.tabitem {
+  border: 0.5px solid #444;
+  font-weight: bold;
+  margin: 0 4px;
+  border-radius: 4px;
+  color: #333 !important;
+}
+
+/* Thanh gạch dưới của tab */
+.MuiTabs-indicator {
+  background-color: #0044cc !important;
+}
+
+/* Thanh tìm kiếm */
+.option-dropdown {
+  background-color: rgb(245, 253, 255);
+}
+
+/* Các ô nhập date */
+.option-search-start,
+.option-search-end {
+  width: 180px;
+}
+
+/* Container bảng */
+.option-table-container {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Bảng */
+.option-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header bảng */
+.head-option th {
+  background-color: #c4c4c4;
+  color: #000000;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Các cell */
+.option-table th,
+.option-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+/* Zebra striping cho các hàng */
+.option-table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+.option-table tbody tr:nth-of-type(even) {
+  background-color: #fff;
+}
+
+/* Cột hành động */
+.option-table-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Hộp thoại (nếu có) */
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dialog-content {
+  margin-top: 10px;
+}
+.dialogadd {
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

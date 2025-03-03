@@ -309,7 +309,7 @@ const Lesson = () => {
       </TableContainer>
 
       {/* Dialog sửa*/}
-      <Dialog open={openEdit} onClose={handleEditClose}>
+      <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa bài học</DialogTitle>
         <DialogContent>
           {selectedLesson && (
@@ -363,6 +363,7 @@ const Lesson = () => {
                 )}
               </Select>
 
+              <InputLabel className="label">Chủ đề</InputLabel>
               <Select
                 label="Chủ đề"
                 fullWidth
@@ -432,7 +433,7 @@ const Lesson = () => {
       </Dialog>
 
       {/* Dialog thêm */}
-      <Dialog open={openAdd} onClose={handleAddClose}>
+      <Dialog open={openAdd} onClose={handleAddClose} fullWidth maxWidth="md">
         <DialogTitle>Thêm bài học</DialogTitle>
         <DialogContent>
           <TextField
