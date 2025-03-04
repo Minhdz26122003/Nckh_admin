@@ -39,19 +39,19 @@ const Lesson = () => {
   const [lessons, setLesson] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [topics, setTopic] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
 
-  const [skill, setSkill] = useState(""); // Lọc theo độ khó
-  const [difficulty, setDifficulty] = useState(""); // Lọc theo độ khó
+  const [skill, setSkill] = useState("");
+  const [difficulty, setDifficulty] = useState("");
   // State phân trang
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 10,
+    limit: 5,
   });
 
   const filteredLesson = lessons.filter((lesson) => {
@@ -75,22 +75,101 @@ const Lesson = () => {
     }
   };
 
-  const fetchLessons = async () => {
+  const fetchLessons = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
-      const response = await axios.get(`${url}myapi/baihoc/getall`);
+      const response = await axios.get(`${url}myapi/baihoc/getall`, {
+        params: { page, limit },
+      });
       setLesson(response.data.baihoc);
-      console.log(response);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching lessons:", error);
     }
   };
 
+  //tìm kiếm theo tiêu đề
+  const searchLesson = async (searchTerm) => {
+    try {
+      const response = await axios.get(
+        `${url}myapi/lessons/tklessons?title=${searchTerm}`
+      );
+      const lessons = response.data.lessons;
+      setLesson(lessons);
+    } catch (error) {
+      console.error("Error searching lessons:", error);
+    }
+  };
+
+  // tìm kiếm bài học theo ngày
+  const searchLessonsDate = async (startDate, endDate) => {
+    try {
+      if (!startDate || !endDate) {
+        console.error("Ngày bắt đầu và kết thúc không hợp lệ.");
+        return;
+      }
+      const response = await axios.get(
+        `${url}myapi/baihoc/tkbaihoc?start_date=${startDate}&end_date=${endDate}`
+      );
+      if (response.data.success) {
+        setLesson(response.data.lessons);
+      } else {
+        setLesson([]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm bài học:", error);
+    }
+  };
+
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    fetchLessons(1, pagination.limit);
+  };
+
+  const handlePageChange = (event, value) => {
+    fetchLessons(value, pagination.limit);
+  };
+
+  useEffect(() => {
+    fetchTopics();
+    if ((startDate && endDate) || searchTerm) {
+      searchLessonsDate(startDate, endDate);
+      searchLesson(searchTerm);
+    } else {
+      fetchLessons();
+    }
+  }, [searchTerm, startDate, endDate]);
+
+  // Kiểm tra dữ liệu nhập
+  const checkData = (lesson) => {
+    if (
+      !lesson.title ||
+      !lesson.content ||
+      !lesson.skill ||
+      !lesson.topic_id ||
+      !lesson.difficulty_level
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return false;
+    }
+    return true;
+  };
+
   // thêm bài học
   const handleAddSubmit = async (newLesson) => {
+    if (!checkData(selectedLesson)) return;
     try {
       const formData = new FormData();
       formData.append("title", newLesson.title);
       formData.append("content", newLesson.content);
+      formData.append("question_type", newLesson.question_type);
       formData.append("skill", newLesson.skill);
       formData.append("topic_id", newLesson.topic_id);
       formData.append("difficulty_level", newLesson.difficulty_level);
@@ -98,19 +177,14 @@ const Lesson = () => {
       // Gửi yêu cầu thêm dịch vụ mới
       const response = await axios.post(
         `${url}/myapi/Baihoc/themBaihoc`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        formData
       );
       if (response.data.success) {
-        console.log("Thêm bài học thành công");
+        window.alert("Thêm bài học thành công");
       } else {
         console.error("Lỗi:", response.data.message);
       }
-      // Sau khi thêm thành công, đóng form và tải lại danh sách
+
       setOpenAdd(false);
       fetchLessons();
     } catch (error) {
@@ -125,44 +199,14 @@ const Lesson = () => {
     setOpenAdd(false);
   };
 
-  // tìm kiếm bài học
-  const searchLessons = async (startDate, endDate) => {
-    try {
-      if (!startDate || !endDate) {
-        console.error("Ngày bắt đầu và kết thúc không hợp lệ.");
-        return;
-      }
-      const response = await axios.get(
-        `${url}myapi/baihoc/tkbaihoc?start_date=${startDate}&end_date=${endDate}`
-      );
-      console.log(response.data);
-
-      if (response.data.success) {
-        setLesson(response.data.lessons);
-      } else {
-        setLesson([]);
-      }
-    } catch (error) {
-      console.error("Lỗi khi tìm kiếm bài học:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTopics();
-    if (startDate && endDate) {
-      searchLessons(startDate, endDate);
-    } else {
-      fetchLessons();
-    }
-  }, [startDate, endDate]);
-
   // Sửa bài học
   const handleEditSubmit = async () => {
+    if (!checkData(selectedLesson)) return;
     try {
       await axios.put(`${url}myapi/Baihoc/suaBaihoc`, selectedLesson);
-
       setOpenEdit(false);
       fetchLessons();
+      window.alert("Sửa bài học thành côngcông");
     } catch (error) {
       console.error("Error updating lesson:", error);
     }
@@ -197,7 +241,19 @@ const Lesson = () => {
   return (
     <div>
       {/* Tab chọn trạng thái */}
-      <div className="lesson-topbar">
+      <Box className="lesson-topbar">
+        <Box className="lesson-search-container">
+          <TextField
+            className="lesson-search-bar"
+            label="Tìm bài học"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Tìm kiếm bài học"
+          />
+        </Box>
         <Box className="lesson-dropdown">
           {/* Dropdown Lọc theo kỹ năng */}
           <FormControl style={{ minWidth: 200 }}>
@@ -232,7 +288,7 @@ const Lesson = () => {
         </Box>
         {/* Tìm kiếm theo ngày */}
 
-        <Box className="lesson-search-bar">
+        <Box className="lesson-searchdate-bar">
           <TextField
             className="lesson-search-start"
             label="Ngày bắt đầu"
@@ -256,7 +312,7 @@ const Lesson = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </Box>
-      </div>
+      </Box>
       {/* Bảng bài học */}
       <TableContainer component={Paper} className="lesson-table-container">
         <Table aria-label="lesson table" className="lesson-table">
@@ -322,7 +378,7 @@ const Lesson = () => {
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>

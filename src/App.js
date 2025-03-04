@@ -18,6 +18,7 @@ import Lessques from "./Pages/Less_Ques/Less_Ques";
 import Question from "./Pages/Questtion/Question";
 import Option from "./Pages/Option/Option";
 import Test from "./Pages/Test/Test";
+import Testquest from "./Pages/Test_Question/Test_Question";
 import { Box } from "@mui/material";
 import "./App.css";
 
@@ -141,6 +142,10 @@ function App() {
                 <Route
                   path="/test"
                   element={<PrivateRoute element={<Test />} />}
+                />
+                <Route
+                  path="/testquest"
+                  element={<PrivateRoute element={<Testquest />} />}
                 />
                 <Route
                   path="/profile"

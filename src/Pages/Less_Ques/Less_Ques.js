@@ -41,7 +41,7 @@ const Less_Ques = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 10,
+    limit: 5,
   });
   useEffect(() => {
     fetchLessonQuestion();
@@ -52,10 +52,20 @@ const Less_Ques = () => {
     }
   }, [selectedLesson?.question_id]);
 
-  const fetchLessonQuestion = async () => {
+  const fetchLessonQuestion = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
-      const response = await axios.get(`${url}myapi/Lesson_Question/getall`);
+      const response = await axios.get(`${url}myapi/Lesson_Question/getall`, {
+        params: { page, limit },
+      });
       setLessonQuestion(response.data);
+      setPagination({
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching lesson-question:", error);
     }
@@ -85,6 +95,10 @@ const Less_Ques = () => {
     }
   };
 
+  const handlePageChange = (event, value) => {
+    fetchLessonQuestion(value, pagination.limit);
+  };
+
   // thêm câu hỏi vào bài học
   const handleAddSubmit = async (newData) => {
     try {
@@ -99,7 +113,7 @@ const Less_Ques = () => {
 
       if (response.data.success) {
         window.alert("Thêm liên kết thành công");
-        fetchLessonQuestion(); // Cập nhật danh sách mới
+        fetchLessonQuestion();
         setOpenAdd(false);
       } else {
         console.error("Lỗi:", response.data.message);
@@ -131,7 +145,7 @@ const Less_Ques = () => {
 
       if (response.data.success) {
         window.alert("Xóa liên kết thành công");
-        fetchLessonQuestion(); // Cập nhật danh sách
+        fetchLessonQuestion();
       } else {
         console.error("Lỗi:", response.data.message);
       }
@@ -194,7 +208,7 @@ const Less_Ques = () => {
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>

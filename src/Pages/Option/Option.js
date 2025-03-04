@@ -70,7 +70,10 @@ const Option = () => {
   });
 
   // Hàm lấy dữ liệu Option
-  const fetchOptions = async () => {
+  const fetchOptions = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
       const response = await axios.get(`${url}myapi/Option/getOption`);
       setOptions(response.data);
@@ -81,8 +84,15 @@ const Option = () => {
   // Hàm lấy dữ liệu question
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get(`${url}myapi/questions/gettquestions`);
+      const response = await axios.get(`${url}myapi/questions/gettquestions`, {
+        params: { page, limit },
+      });
       setQuestion(response.data);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching questions", error);
     }
@@ -95,7 +105,6 @@ const Option = () => {
         `${url}myapi/Option/tkoptions?content=${searchTerm}`
       );
       const options = response.data.options;
-      console.log("API Response:", options);
       setOptions(options);
     } catch (error) {
       console.error("Error searching options:", error);
@@ -112,8 +121,14 @@ const Option = () => {
     }
   }, [searchTerm]);
 
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    fetchOptions(1, pagination.limit);
+  };
+
+  const handlePageChange = (event, value) => {
+    fetchOptions(value, pagination.limit);
   };
 
   // Kiểm tra dữ liệu nhập
@@ -126,12 +141,12 @@ const Option = () => {
   };
 
   // Thêm Option
-  const handleAddSubmit = async () => {
+  const handleAddSubmit = async (newOption) => {
     if (!checkData(selectedOption)) return;
     try {
       const response = await axios.post(
         `${url}myapi/Option/themOption`,
-        newAccount
+        newOption
       );
 
       if (response.data.success) {
@@ -312,7 +327,7 @@ const Option = () => {
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>

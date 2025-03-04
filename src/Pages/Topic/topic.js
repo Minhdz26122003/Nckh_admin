@@ -51,10 +51,20 @@ const Topic = () => {
     fetchTopic();
   }, []);
 
-  const fetchTopic = async () => {
+  const fetchTopic = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
-      const response = await axios.get(`${url}myapi/Chude/Chude`);
+      const response = await axios.get(`${url}myapi/Chude/Chude`, {
+        params: { page, limit },
+      });
       setTopics(response.data);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching topic:", error);
     }
@@ -91,16 +101,20 @@ const Topic = () => {
     }
   }, [searchTerm]);
 
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    // console.log("Search Term:", event.target.value);
+    fetchTopic(1, pagination.limit);
+  };
+
+  const handlePageChange = (event, value) => {
+    fetchTopic(value, pagination.limit);
   };
 
   // THÊM CHỦ ĐỀ
   const handleAddSubmit = async (newTopic) => {
+    if (!checkData(searchTopics)) return;
     try {
-      checkData();
-
       const formData = new FormData();
       formData.append("name", newTopic.name);
       formData.append("description", newTopic.description);
@@ -286,7 +300,7 @@ const Topic = () => {
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>

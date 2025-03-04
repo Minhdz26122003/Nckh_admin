@@ -41,7 +41,7 @@ const Question = () => {
   const [endDate, setEndDate] = useState("");
   const [topics, setTopic] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [skill, setSkill] = useState(""); // Lọc theo độ khó
   const [difficulty, setDifficulty] = useState(""); // Lọc theo độ khó
   const [questionType, setQuestionType] = useState(""); // Lọc theo loại câu hỏi
@@ -67,10 +67,20 @@ const Question = () => {
     return matchSkill && matchDifficulty && matchQuestionType;
   });
 
-  const fetchQuestion = async () => {
+  const fetchQuestion = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
-      const response = await axios.get(`${url}myapi/Question/getQ`);
+      const response = await axios.get(`${url}myapi/Question/getQ`, {
+        params: { page, limit },
+      });
       setQuestion(response.data);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching Question", error);
     }
@@ -83,45 +93,22 @@ const Question = () => {
       console.error("Error fetching topic", error);
     }
   };
-  // thêm câu hỏi
-  const handleAddSubmit = async (newQuest) => {
-    try {
-      const formData = new FormData();
-      formData.append("content", newQuest.content);
-      formData.append("question_type", newQuest.question_type);
-      formData.append("skill", newQuest.skill);
-      formData.append("topic_id", newQuest.topic_id);
-      formData.append("difficulty_level", newQuest.difficulty_level);
-      formData.append("audio_url", newQuest.audio_url);
-      formData.append("correct_answer", newQuest.correct_answer);
 
-      // Gửi yêu cầu thêm dịch vụ mới
-      const response = await axios.post(
-        `${url}/myapi/Baihoc/themcauhoi`,
-        formData
+  //tìm kiếm theo tiêu đề
+  const searchQuestion = async (searchTerm) => {
+    try {
+      const response = await axios.get(
+        `${url}myapi/question/tkquestion?content=${searchTerm}`
       );
-      if (response.data.success) {
-        console.log("Thêm câu hỏi thành công");
-      } else {
-        console.error("Lỗi:", response.data.message);
-      }
-      // Sau khi thêm thành công, đóng form và tải lại danh sách
-      setOpenAdd(false);
-      fetchQuestion();
+      const question = response.data.question;
+      setQuestion(question);
     } catch (error) {
-      console.error("Error adding quest:", error);
+      console.error("Error searching question:", error);
     }
   };
 
-  const handleAddClick = () => {
-    setOpenAdd(true);
-  };
-  const handleAddClose = () => {
-    setOpenAdd(false);
-  };
-
   // tìm kiếm câu hỏi
-  const searchQuestions = async (startDate, endDate) => {
+  const searchDateQuestion = async (startDate, endDate) => {
     try {
       if (!startDate || !endDate) {
         console.error("Ngày bắt đầu và kết thúc không hợp lệ.");
@@ -142,22 +129,90 @@ const Question = () => {
     }
   };
 
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    fetchQuestion(1, pagination.limit);
+  };
+
+  const handlePageChange = (event, value) => {
+    fetchQuestion(value, pagination.limit);
+  };
+
   useEffect(() => {
     fetchTopics();
-    if (startDate && endDate) {
-      searchQuestions(startDate, endDate);
+    if (searchTerm || (startDate && endDate)) {
+      searchDateQuestion(startDate, endDate);
+      searchQuestion(searchTerm);
     } else {
       fetchQuestion();
     }
-  }, [startDate, endDate]);
+  }, [searchTerm, startDate, endDate]);
+
+  // Kiểm tra dữ liệu nhập
+  const checkData = (question) => {
+    if (
+      !question.content ||
+      !question.question_type ||
+      !question.skill ||
+      !question.topic_id ||
+      !question.difficulty_level ||
+      !question.audio_url ||
+      !question.correct_answer
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return false;
+    }
+    return true;
+  };
+
+  // thêm câu hỏi
+  const handleAddSubmit = async (newQuest) => {
+    if (!checkData(selectedQuesttion)) return;
+    try {
+      const formData = new FormData();
+      formData.append("content", newQuest.content);
+      formData.append("question_type", newQuest.question_type);
+      formData.append("skill", newQuest.skill);
+      formData.append("topic_id", newQuest.topic_id);
+      formData.append("difficulty_level", newQuest.difficulty_level);
+      formData.append("audio_url", newQuest.audio_url);
+      formData.append("correct_answer", newQuest.correct_answer);
+
+      // Gửi yêu cầu thêm dịch vụ mới
+      const response = await axios.post(
+        `${url}/myapi/Baihoc/themcauhoi`,
+        formData
+      );
+      if (response.data.success) {
+        window.alert("Xóa bài học thành công");
+      } else {
+        console.error("Lỗi:", response.data.message);
+      }
+      // Sau khi thêm thành công, đóng form và tải lại danh sách
+      setOpenAdd(false);
+      fetchQuestion();
+    } catch (error) {
+      console.error("Error adding quest:", error);
+    }
+  };
+
+  const handleAddClick = () => {
+    setOpenAdd(true);
+  };
+  const handleAddClose = () => {
+    setOpenAdd(false);
+  };
 
   // Sửa câu hỏi
   const handleEditSubmit = async () => {
+    if (!checkData(selectedQuesttion)) return;
     try {
       await axios.put(`${url}myapi/Quest/sua`, selectedQuesttion);
 
       setOpenEdit(false);
       fetchQuestion();
+      window.alert("Sửa câu hỏi thành công");
     } catch (error) {
       console.error("Error updating Question:", error);
     }
@@ -192,9 +247,22 @@ const Question = () => {
   return (
     <div>
       <div className="quest-topbar">
+        <Box className="quest-search-container">
+          <TextField
+            className="quest-search-bar"
+            label="Tìm câu hỏi"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Tìm kiếm câu hỏi"
+          />
+        </Box>
+
         <Box className="quest-dropdown">
           {/* Dropdown Lọc theo kỹ năng */}
-          <FormControl style={{ minWidth: 200 }}>
+          <FormControl style={{ minWidth: 150 }}>
             <InputLabel>Kỹ năng</InputLabel>
             <Select
               value={skill}
@@ -210,7 +278,7 @@ const Question = () => {
           </FormControl>
 
           {/* Lọc theo độ khó */}
-          <FormControl style={{ minWidth: 200 }}>
+          <FormControl style={{ minWidth: 150 }}>
             <InputLabel>Độ khó</InputLabel>
             <Select
               value={difficulty}
@@ -225,7 +293,7 @@ const Question = () => {
           </FormControl>
 
           {/* Lọc theo loại câu hỏi */}
-          <FormControl style={{ minWidth: 200 }}>
+          <FormControl style={{ minWidth: 150 }}>
             <InputLabel>Loại câu hỏi</InputLabel>
             <Select
               value={questionType}
@@ -241,8 +309,9 @@ const Question = () => {
             </Select>
           </FormControl>
         </Box>
+
         {/* Tìm kiếm theo ngày */}
-        <Box className="quest-search-bar">
+        <Box className="quest-searchdate-bar">
           <TextField
             className="quest-search-start"
             label="Ngày bắt đầu"
@@ -336,7 +405,7 @@ const Question = () => {
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>

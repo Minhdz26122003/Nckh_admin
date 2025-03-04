@@ -1,8 +1,9 @@
 /* Container cho Tab và thanh tìm kiếm */
-.lesson-topbar {
+.tq-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 10px;
   gap: 20px;
 }
 
@@ -10,7 +11,9 @@
 .MuiTabs-root .MuiTab-root.Mui-selected {
   background-color: #9fbef7;
 }
-
+.label {
+  margin-top: 10px;
+}
 .tabstatus {
   margin-left: -170px;
 }
@@ -29,52 +32,30 @@
 }
 
 /* Thanh tìm kiếm */
-.lesson-dropdown {
+.tq-dropdown {
   background-color: rgb(245, 253, 255);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  gap: 10px;
-  display: flex;
-  align-items: center;
-  width: auto;
 }
-.lesson-search-container {
-  padding-bottom: 6px;
-  width: 40%;
-}
-.lesson-search-bar {
-  background-color: rgb(245, 253, 255);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.lesson-searchdate-bar {
-  background-color: rgb(245, 253, 255);
-  border-radius: 8px;
-  gap: 10px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: auto;
-}
+
 /* Các ô nhập date */
-.lesson-search-start,
-.lesson-search-end {
+.tq-search-start,
+.tq-search-end {
   width: 180px;
 }
 
 /* Container bảng */
-.lesson-table-container {
+.tq-table-container {
   width: 100%;
   margin-bottom: 10px;
 }
 
 /* Bảng */
-.lesson-table {
+.tq-table {
   width: 100%;
   border-collapse: collapse;
 }
 
 /* Header bảng */
-.head-lesson th {
+.head-tq th {
   background-color: #c4c4c4;
   color: #000000;
   font-weight: bold;
@@ -82,22 +63,22 @@
 }
 
 /* Các cell */
-.lesson-table th,
-.lesson-table td {
+.tq-table th,
+.tq-table td {
   padding: 12px;
   text-align: left;
 }
 
 /* Zebra striping cho các hàng */
-.lesson-table tbody tr:nth-of-type(odd) {
+.tq-table tbody tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
-.lesson-table tbody tr:nth-of-type(even) {
+.tq-table tbody tr:nth-of-type(even) {
   background-color: #fff;
 }
 
 /* Cột hành động */
-.lesson-table-actions {
+.tq-table-actions {
   display: flex;
   justify-content: space-around;
 }
@@ -111,7 +92,8 @@
 .dialog-content {
   margin-top: 10px;
 }
-
+.dialogadd {
+}
 .dialog-actions {
   display: flex;
   justify-content: flex-end;

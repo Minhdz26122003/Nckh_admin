@@ -19,15 +19,12 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon,
-} from "@mui/icons-material";
+import Pagination from "@mui/material/Pagination";
+import { Edit as EditIcon, Add as AddIcon } from "@mui/icons-material";
 import axios from "axios";
-import "./Accounts.css"; // Import style riêng
+import "./Accounts.css";
 import url from "../../ipconfixad.js";
+
 const Account = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState({
@@ -41,10 +38,11 @@ const Account = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 3,
+  });
 
   const roleMapping = {
     0: "Người dùng",
@@ -52,33 +50,38 @@ const Account = () => {
     2: "Quản lý",
   };
 
-  const fetchAccounts = async () => {
+  const fetchAccounts = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const iduser = user?.id || null;
-
       if (!iduser) {
         console.error("Không tìm thấy iduser trong localStorage.");
         return;
       }
-      const response = await axios.get(`${url}myapi/Taikhoan/getTK.php`, {
-        params: {
-          iduser: iduser,
-        },
+      const response = await axios.get(`${url}myapi/Taikhoan/getTK1.php`, {
+        params: { iduser, page, limit },
       });
-
       const data = response.data;
-      if (Array.isArray(data)) {
+      if (data && Array.isArray(data.accounts)) {
+        setAccounts(data.accounts);
+        setPagination({
+          currentPage: data.currentPage,
+          totalPages: data.totalPages,
+          limit,
+        });
+      } else if (Array.isArray(data)) {
         setAccounts(data);
       } else {
-        console.error("Dữ liệu trả về không phải là mảng:", data);
+        console.error("Dữ liệu trả về không đúng định dạng:", data);
         setAccounts([]);
       }
     } catch (error) {
       console.error("Error fetching accounts:", error);
     }
   };
-
   //TÌM KIẾM TÀI KHOẢN
   const searchAccounts = async (username) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -90,9 +93,7 @@ const Account = () => {
           username: username,
         },
       });
-
       const accounts = response.data.accounts;
-      console.log("API Response:", accounts);
       setAccounts(accounts);
     } catch (error) {
       console.error("Error searching accounts:", error);
@@ -101,7 +102,6 @@ const Account = () => {
 
   useEffect(() => {
     if (searchTerm) {
-      console.log("Searching for:", searchTerm);
       searchAccounts(searchTerm);
     } else {
       console.log("Fetching all accounts");
@@ -109,47 +109,57 @@ const Account = () => {
     }
   }, [searchTerm]);
 
-  // Cập nhật từ khóa tìm kiếm
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    fetchAccounts(1, pagination.limit);
   };
 
-  //  THÊM TÀI KHOẢN
+  const handlePageChange = (event, value) => {
+    fetchAccounts(value, pagination.limit);
+  };
+
   const handleAddSubmit = async (newAccount) => {
     try {
       await axios.post(`${url}myapi/Taikhoan/themtaikhoan.php`, newAccount);
       setOpenAdd(false);
       fetchAccounts();
+      window.alert("Thêm tài khoản thành công");
     } catch (error) {
       console.error("Error adding account:", error);
     }
   };
-  const handleAddClick = () => {
-    setOpenAdd(true);
-  };
-  const handleAddClose = () => {
-    setOpenAdd(false);
-  };
 
-  // SỬA TÀI KHOẢN
   const handleEditSubmit = async () => {
     try {
-      // Gửi dữ liệu đã sửa về server
       await axios.put(`${url}myapi/Taikhoan/suataikhoan.php`, selectedAccount);
-
       setOpenEdit(false);
       fetchAccounts();
-      console.log("thanhcong");
+      window.alert("Sửa tài khoản thành công");
     } catch (error) {
       console.error("Error updating account:", error);
     }
   };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa tài khoản này không?"))
+      return;
+    try {
+      await axios.delete(`${url}myapi/Taikhoan/xoataikhoan`, {
+        data: { iduser: id },
+      });
+      setAccounts(accounts.filter((account) => account.iduser !== id));
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
+
   const handleEdit = (account) => {
     setSelectedAccount(account);
     setOpenEdit(true);
   };
-  const handleEditClose = (account) => {
-    setOpenEdit(false);
+
+  const resetSelectedAccount = () =>
     setSelectedAccount({
       username: "",
       email: "",
@@ -158,33 +168,17 @@ const Account = () => {
       diachi: "",
       vaitro: 0,
     });
+
+  const handleEditClose = () => {
+    setOpenEdit(false);
+    resetSelectedAccount();
   };
 
-  // XÓA TÀI KHOẢN
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc chắn muốn xóa tài khoản này không?"
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    try {
-      await axios.delete(`${url}myapi/Taikhoan/xoataikhoan.php`, {
-        data: { iduser: id }, // Gửi ID trong body của yêu cầu DELETE
-      });
-
-      // Cập nhật danh sách sau khi xóa
-      setAccounts(accounts.filter((account) => account.iduser !== id));
-    } catch (error) {
-      console.error("Error deleting account:", error);
-    }
-  };
+  const handleAddClick = () => setOpenAdd(true);
+  const handleAddClose = () => setOpenAdd(false);
 
   return (
     <div>
-      {/* Thanh tìm kiếm */}
       <div className="account-search-container">
         <TextField
           className="account-search-bar"
@@ -200,7 +194,6 @@ const Account = () => {
       <div className="account-table-container">
         <TableContainer component={Paper}>
           <Table className="account-table">
-            {/* Tiêu đề bảng */}
             <TableHead className="head-account">
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -209,13 +202,12 @@ const Account = () => {
                 <TableCell>Mật khẩu</TableCell>
                 <TableCell>Số điện thoại</TableCell>
                 <TableCell>Địa chỉ</TableCell>
-                <TableCell>Vai trò </TableCell>
+                <TableCell>Vai trò</TableCell>
                 <TableCell>Hành động</TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
-              {accounts && accounts.length > 0 ? (
+              {accounts.length > 0 ? (
                 accounts.map((account) => (
                   <TableRow key={account.iduser}>
                     <TableCell>{account.iduser}</TableCell>
@@ -232,12 +224,7 @@ const Account = () => {
                       >
                         <EditIcon />
                       </IconButton>
-                      {/* <IconButton
-                      color="error"
-                      // onClick={() => handleDelete(account.iduser)}
-                    >
-                      <DeleteIcon />
-                    </IconButton> */}
+                      {/* Bạn có thể thêm nút xóa nếu cần */}
                     </TableCell>
                   </TableRow>
                 ))
@@ -251,111 +238,110 @@ const Account = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box
+          display="flex"
+          justifyContent="end"
+          alignItems="center"
+          marginTop={2}
+        >
+          <Pagination
+            count={pagination.totalPages}
+            page={pagination.currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Box>
       </div>
 
-      {/* Dialog sửa*/}
+      {/* Dialog Sửa tài khoản */}
       <Dialog open={openEdit} onClose={handleEditClose} fullWidth maxWidth="md">
         <DialogTitle>Sửa tài khoản</DialogTitle>
         <DialogContent>
-          {selectedAccount && (
-            <>
-              <TextField
-                label="Tên tài khoản"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.username || ""}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    username: e.target.value,
-                  })
-                }
-              />
-              <TextField
-                label="Email"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.email || ""}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    email: e.target.value,
-                  })
-                }
-              />
-              <TextField
-                label="Mật khẩu"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.password || ""}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    password: e.target.value,
-                  })
-                }
-              />
-              <TextField
-                label="Số điện thoại"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.sodienthoai || ""}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    sodienthoai: e.target.value,
-                  })
-                }
-              />
-              <TextField
-                label="Địa chỉ"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.diachi || ""}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    diachi: e.target.value,
-                  })
-                }
-              />
-
-              <Select
-                label="Vai trò"
-                fullWidth
-                margin="normal"
-                value={selectedAccount.vaitro}
-                onChange={(e) =>
-                  setSelectedAccount({
-                    ...selectedAccount,
-                    vaitro: e.target.value, // Lưu giá trị vai trò là số 0, 1, hoặc 2
-                  })
-                }
-              >
-                <MenuItem value={0}>Người dùng</MenuItem>
-                <MenuItem value={1}>Nhân viên</MenuItem>
-                <MenuItem value={2}>Quản lý</MenuItem>
-              </Select>
-            </>
-          )}
+          <TextField
+            label="Tên tài khoản"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.username || ""}
+            onChange={(e) =>
+              setSelectedAccount({
+                ...selectedAccount,
+                username: e.target.value,
+              })
+            }
+          />
+          <TextField
+            label="Email"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.email || ""}
+            onChange={(e) =>
+              setSelectedAccount({ ...selectedAccount, email: e.target.value })
+            }
+          />
+          <TextField
+            label="Mật khẩu"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.password || ""}
+            onChange={(e) =>
+              setSelectedAccount({
+                ...selectedAccount,
+                password: e.target.value,
+              })
+            }
+          />
+          <TextField
+            label="Số điện thoại"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.sodienthoai || ""}
+            onChange={(e) =>
+              setSelectedAccount({
+                ...selectedAccount,
+                sodienthoai: e.target.value,
+              })
+            }
+          />
+          <TextField
+            label="Địa chỉ"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.diachi || ""}
+            onChange={(e) =>
+              setSelectedAccount({ ...selectedAccount, diachi: e.target.value })
+            }
+          />
+          <Select
+            label="Vai trò"
+            fullWidth
+            margin="normal"
+            value={selectedAccount.vaitro}
+            onChange={(e) =>
+              setSelectedAccount({ ...selectedAccount, vaitro: e.target.value })
+            }
+          >
+            <MenuItem value={0}>Người dùng</MenuItem>
+            <MenuItem value={1}>Nhân viên</MenuItem>
+            <MenuItem value={2}>Quản lý</MenuItem>
+          </Select>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleEditClose}
-            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+            style={{ backgroundColor: "#ff0000", color: "#fff" }}
           >
             Trở lại
           </Button>
           <Button
             onClick={handleEditSubmit}
-            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+            style={{ backgroundColor: "#228b22", color: "#fff" }}
           >
             Lưu lại
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Dialog thêm */}
+      {/* Dialog Thêm tài khoản */}
       <Dialog open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Thêm tài khoản</DialogTitle>
         <DialogContent>
@@ -375,10 +361,7 @@ const Account = () => {
             fullWidth
             margin="normal"
             onChange={(e) =>
-              setSelectedAccount({
-                ...selectedAccount,
-                email: e.target.value,
-              })
+              setSelectedAccount({ ...selectedAccount, email: e.target.value })
             }
           />
           <TextField
@@ -408,23 +391,16 @@ const Account = () => {
             fullWidth
             margin="normal"
             onChange={(e) =>
-              setSelectedAccount({
-                ...selectedAccount,
-                diachi: e.target.value,
-              })
+              setSelectedAccount({ ...selectedAccount, diachi: e.target.value })
             }
           />
-
           <Select
             label="Vai trò"
             fullWidth
             margin="normal"
-            value={selectedAccount.vaitro} // Giá trị hiện tại của vai trò
+            value={selectedAccount.vaitro}
             onChange={(e) =>
-              setSelectedAccount({
-                ...selectedAccount,
-                vaitro: e.target.value, // Lưu giá trị vai trò là số 0, 1, hoặc 2
-              })
+              setSelectedAccount({ ...selectedAccount, vaitro: e.target.value })
             }
           >
             <MenuItem value={0}>Người dùng</MenuItem>
@@ -432,24 +408,22 @@ const Account = () => {
             <MenuItem value={2}>Quản lý</MenuItem>
           </Select>
         </DialogContent>
-
         <DialogActions>
           <Button
             onClick={handleAddClose}
-            style={{ backgroundColor: "#ff0000", color: "#ffffff" }}
+            style={{ backgroundColor: "#ff0000", color: "#fff" }}
           >
             Trở lại
           </Button>
           <Button
             onClick={() => handleAddSubmit(selectedAccount)}
-            style={{ backgroundColor: "#228b22", color: "#ffffff" }}
+            style={{ backgroundColor: "#228b22", color: "#fff" }}
           >
             Thêm
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Nút thêm tài khoản */}
       <Box sx={{ position: "fixed", bottom: 30, right: 50 }}>
         <Fab color="primary" aria-label="add" onClick={handleAddClick}>
           <AddIcon />

@@ -52,28 +52,21 @@ const TestManagement = () => {
     return matchDifficulty;
   });
 
-  // const fetch = async (page = 1, limit = 10) => {
-  //   let endpoint = `${url}myapi/T/getAll?page=${page}&limit=${limit}`;
-  //
-  //   try {
-  //     const response = await axios.get(endpoint);
-  //     // Ví dụ: response.data có cấu trúc { t, totalT, totalPages, currentPage }
-  //     setT(response.data.t);
-  //     // Bạn có thể lưu thêm state cho phân trang (totalPages, currentPage) để hiển thị nút chuyển trang
-  //     setPagination({
-  //       totalPages: response.data.totalPages,
-  //       currentPage: response.data.currentPage,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching t", error);
-  //   }
-  // };
-
   // Hàm lấy dữ liệu bài kiểm tra
-  const fetchTest = async () => {
+  const fetchTest = async (
+    page = pagination.currentPage,
+    limit = pagination.limit
+  ) => {
     try {
-      const response = await axios.get(`${url}myapi/Test/getall`);
+      const response = await axios.get(`${url}myapi/Test/getall`, {
+        params: { page, limit },
+      });
       setTests(response.data);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        limit,
+      });
     } catch (error) {
       console.error("Error fetching Test:", error);
     }
@@ -102,28 +95,36 @@ const TestManagement = () => {
     }
   }, [searchTerm]);
 
+  // Khi thay đổi từ khóa tìm kiếm, reset về trang 1
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    fetchTest(1, pagination.limit);
   };
 
-  // Xử lý thay đổi trang khi người dùng nhấn nút phân trang
-  // const handlePageChange = (event, value) => {
-  //     fetchTests(value);
-  // };
+  const handlePageChange = (event, value) => {
+    fetchTest(value, pagination.limit);
+  };
 
   // Kiểm tra dữ liệu nhập
   const checkData = (test) => {
-    if (!test || !test.title || !test.duration || !test.difficulty_level) {
+    if (!test.title || !test.duration || !test.difficulty_level) {
       alert("Vui lòng điền đầy đủ thông tin!");
       return;
     }
     return true;
   };
+
   // Thêm bài kiểm tra
   const handleAddSubmit = async (newtest) => {
     if (!checkData(selectedTest)) return;
     try {
-      const response = await axios.post(`${url}myapi/Test/themTest`, newtest);
+      const formData = new FormData();
+      formData.append("title", newtest.title);
+      formData.append("duration", newtest.duration);
+      formData.append("difficulty_level", newtest.difficulty_level);
+
+      const response = await axios.post(`${url}myapi/Test/themTest`, formData);
+
       if (response.data.success) {
         console.log("Thêm bài kiểm tra thành công");
       } else {
@@ -269,16 +270,11 @@ const TestManagement = () => {
         </Table>
       </TableContainer>
       {/* Nút phân trang hiển thị trang hiện tại */}
-      <Box
-        display="flex"
-        justifyContent="end"
-        alignItems="center"
-        marginTop={2}
-      >
+      <Box display="flex" justifyContent="" alignItems="center" marginTop={2}>
         <Pagination
           count={pagination.totalPages}
           page={pagination.currentPage}
-          //   onChange={handlePageChange}
+          onChange={handlePageChange}
           color="primary"
         />
       </Box>
@@ -405,7 +401,7 @@ const TestManagement = () => {
             Trở lại
           </Button>
           <Button
-            onClick={handleAddSubmit}
+            onClick={() => handleAddSubmit(selectedTest)}
             style={{ backgroundColor: "#228b22", color: "#ffffff" }}
           >
             Thêm
